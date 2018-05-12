@@ -1,4 +1,4 @@
-package com.eastvillage;
+package com.eastvillage.emerald;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
