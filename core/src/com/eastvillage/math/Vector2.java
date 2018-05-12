@@ -2,7 +2,7 @@ package com.eastvillage.math;
 
 import java.util.Objects;
 
-public class Vector2 {
+public class Vector2 implements Cloneable {
 
     public final static Vector2 RIGHT = new Vector2(1, 0);
     public final static Vector2 UP = new Vector2(0, 1);
@@ -184,6 +184,12 @@ public class Vector2 {
 
     public boolean isZero () {
         return x == 0 && y == 0;
+    }
+
+    @SuppressWarnings({"CloneDoesntDeclareCloneNotSupportedException", "MethodDoesntCallSuperMethod"})
+    @Override
+    protected Vector2 clone() {
+        return new Vector2(x, y);
     }
 
     @Override

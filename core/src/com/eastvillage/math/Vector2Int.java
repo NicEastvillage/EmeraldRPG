@@ -2,7 +2,7 @@ package com.eastvillage.math;
 
 import java.util.Objects;
 
-public class Vector2Int {
+public class Vector2Int implements Cloneable {
 
     public final static Vector2Int RIGHT = new Vector2Int(1, 0);
     public final static Vector2Int UP = new Vector2Int(0, 1);
@@ -77,11 +77,6 @@ public class Vector2Int {
         return x == 0 && y == 0;
     }
 
-    @Override
-    public String toString() {
-        return "(" + x + "," + y + ")";
-    }
-
     /** Rotates the Vector2Int by 90 degrees the specified amount of times, where > 0 is counter-clockwise and < 0 is clockwise. */
     public Vector2Int rotate90(int dir) {
         dir = dir % 4;
@@ -92,6 +87,17 @@ public class Vector2Int {
             case 3: return new Vector2Int(y, -x);
             default: return this;
         }
+    }
+
+    @SuppressWarnings({"CloneDoesntDeclareCloneNotSupportedException", "MethodDoesntCallSuperMethod"})
+    @Override
+    protected Vector2Int clone() {
+        return new Vector2Int(x, y);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + ")";
     }
 
     @Override
