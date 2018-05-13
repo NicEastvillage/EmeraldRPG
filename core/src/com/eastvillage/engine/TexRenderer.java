@@ -51,7 +51,7 @@ public final class TexRenderer implements Component {
             Vector2 position = transform.getWorldPosition();
             float rotation = transform.getWorldRotation();
             float sprWidth = texReg.getRegionWidth();
-            float sprHeight = texReg.getRegionWidth();
+            float sprHeight = texReg.getRegionHeight();
             float originX = sprWidth * 0.5f;
             float originY = sprHeight * 0.5f;
             batch.draw(texReg, position.x - originX, position.y - originY, originX, originY, sprWidth, sprHeight, scale.x, scale.y, (float)Math.toDegrees(rotation));
