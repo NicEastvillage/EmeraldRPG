@@ -22,12 +22,6 @@ public class Vector2 implements Cloneable {
         this.y = y;
     }
 
-    /** Constructs a vector from the given vector
-     * @param v the old vector */
-    public Vector2(Vector2 v) {
-        this(v.x, v.y);
-    }
-
     public float len() {
         return (float)Math.sqrt(x * x + y * y);
     }
@@ -185,12 +179,6 @@ public class Vector2 implements Cloneable {
 
     public boolean isZero () {
         return x == 0 && y == 0;
-    }
-
-    @SuppressWarnings({"CloneDoesntDeclareCloneNotSupportedException", "MethodDoesntCallSuperMethod"})
-    @Override
-    protected Vector2 clone() {
-        return new Vector2(x, y);
     }
 
     @Override

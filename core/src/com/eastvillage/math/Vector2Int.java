@@ -21,12 +21,6 @@ public class Vector2Int implements Cloneable {
         this.y = y;
     }
 
-    /** Constructs a vector from the given vector
-     * @param v the old vector */
-    public Vector2Int(Vector2Int v) {
-        this(v.x, v.y);
-    }
-
     public float lenManhattan() {
         return Math.abs(x) + Math.abs(y);
     }
@@ -87,12 +81,6 @@ public class Vector2Int implements Cloneable {
             case 3: return new Vector2Int(y, -x);
             default: return this;
         }
-    }
-
-    @SuppressWarnings({"CloneDoesntDeclareCloneNotSupportedException", "MethodDoesntCallSuperMethod"})
-    @Override
-    protected Vector2Int clone() {
-        return new Vector2Int(x, y);
     }
 
     @Override

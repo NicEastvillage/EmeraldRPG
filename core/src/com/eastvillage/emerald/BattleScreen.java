@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.eastvillage.emerald.battlefield.Battlefield;
 import com.eastvillage.engine.GameObject;
 import com.eastvillage.engine.TexRenderer;
 import com.eastvillage.math.Vector2;
@@ -20,7 +21,7 @@ public class BattleScreen implements Screen {
         this.game = game;
 
         root = new GameObject();
-        new GameObject(new Vector2(16, 16), 0.4f, root.transform).addComponent(new TexRenderer(new Texture("test.png"), true));
+        new Battlefield(root.transform);
     }
 
     @Override
