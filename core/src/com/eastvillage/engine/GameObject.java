@@ -41,7 +41,7 @@ public class GameObject {
         onUpdate();
         for (Component component : components) {
             if (component.isEnabled()) {
-                component.update();
+                component.update(transform);
             }
         }
         for (TransformTree<GameObject> child : transform.getChildren()) {
@@ -54,7 +54,7 @@ public class GameObject {
     public final void draw(SpriteBatch batch) {
         for (Component component : components) {
             if (component.isEnabled()) {
-                component.draw(batch);
+                component.draw(batch, transform);
             }
         }
         for (TransformTree<GameObject> child : transform.getChildren()) {
