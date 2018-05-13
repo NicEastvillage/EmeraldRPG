@@ -5,7 +5,7 @@ import com.eastvillage.math.Vector2;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TransformTree<T> {
+public final class TransformTree<T> {
 
     public T target;
     private Transform transform;

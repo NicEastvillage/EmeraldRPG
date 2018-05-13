@@ -7,6 +7,7 @@ public class Vector2 implements Cloneable {
     public final static Vector2 RIGHT = new Vector2(1, 0);
     public final static Vector2 UP = new Vector2(0, 1);
     public final static Vector2 ZERO = new Vector2(0, 0);
+    public final static Vector2 ONE = new Vector2(1, 1);
 
     public final float x;
     public final float y;

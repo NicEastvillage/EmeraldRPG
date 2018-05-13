@@ -2,7 +2,7 @@ package com.eastvillage.engine;
 
 import com.eastvillage.math.Vector2;
 
-public class Transform {
+public final class Transform {
 
     private Vector2 pos = new Vector2();
     private Vector2 ori = new Vector2();
