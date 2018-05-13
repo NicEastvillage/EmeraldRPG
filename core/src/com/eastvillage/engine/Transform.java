@@ -1,4 +1,6 @@
-package com.eastvillage.math;
+package com.eastvillage.engine;
+
+import com.eastvillage.math.Vector2;
 
 public class Transform {
 
@@ -22,6 +24,11 @@ public class Transform {
     public Transform (Vector2 position, Vector2 orientation) {
         setPosition(position);
         setOrientation(orientation);
+    }
+
+    public void set(Transform transform) {
+        setPosition(transform.getPosition());
+        setOrientation(transform.getOrientation());
     }
 
     /** Transforms the given vector by this transform
