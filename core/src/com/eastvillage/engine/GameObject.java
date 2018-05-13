@@ -1,6 +1,7 @@
 package com.eastvillage.engine;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.eastvillage.math.Vector2;
 
 import java.util.HashSet;
 
@@ -8,16 +9,39 @@ public class GameObject {
 
     public final TransformTree<GameObject> transform;
 
-    private HashSet<Component> components;
+    private HashSet<Component> components = new HashSet<>();
     private boolean enabled = true;
 
     public GameObject() {
         transform = new TransformTree<>(this);
-        components = new HashSet<>();
     }
 
-    public final void addComponent(Component component) {
+    public GameObject(TransformTree<GameObject> parent) {
+        this(Vector2.ZERO, 0, parent);
+    }
+
+    public GameObject(Vector2 position, TransformTree<GameObject> parent) {
+        this(position, 0, parent);
+    }
+
+    public GameObject(Vector2 position, float radians, TransformTree<GameObject> parent) {
+        transform = new TransformTree<>(this, position, radians, parent);
+    }
+
+    public GameObject(Vector2 position, Vector2 orientation, TransformTree<GameObject> parent) {
+        transform = new TransformTree<>(this, position, orientation, parent);
+    }
+
+    public final GameObject addComponent(Component component) {
         components.add(component);
+        return this;
+    }
+
+    public final GameObject addComponents(Component... components) {
+        for (Component comp : components) {
+            addComponent(comp);
+        }
+        return this;
     }
 
     public final <T extends Component> T getComponent(Class<T> tClass) {

@@ -27,13 +27,23 @@ public final class TransformTree<T> {
     public TransformTree(T target, Vector2 position, float radians, TransformTree<T> parent) {
         this.target = target;
         this.parent = parent;
-        transform = new Transform(position, radians);
+        if (parent != null)
+            parent.children.add(this);
+
+        transform = new Transform();
+        setWorldPosition(position);
+        setWorldRotation(radians);
     }
 
     public TransformTree(T target, Vector2 position, Vector2 orientation, TransformTree<T> parent) {
         this.target = target;
         this.parent = parent;
-        transform = new Transform(position, orientation);
+        if (parent != null)
+            parent.children.add(this);
+
+        transform = new Transform();
+        setWorldPosition(position);
+        setWorldOrientation(orientation);
     }
 
     public void setWorld(Transform transform) {
