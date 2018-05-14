@@ -3,59 +3,32 @@ package com.eastvillage.emerald.unit;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class Knight implements Unit {
+public class Knight implements UnitType {
 
     private static final TextureRegion tex = new TextureRegion(new Texture("Knight.png"));
 
-    private int owner = -1;
-    private int currentHealth = getMaxHealth();
-
-    public Knight() {
-    }
-
-    public Knight(int owner) {
-        this.owner = owner;
-    }
-
     @Override
-    public int getOwner() {
-        return owner;
-    }
-
-    @Override
-    public int getMaxHealth() {
+    public int getMaxHealth(Unit unit) {
         return 30;
     }
 
     @Override
-    public int getCurrentHealth() {
-        return currentHealth;
-    }
-
-    @Override
-    public boolean takeDamage(int dmg) {
-        if (dmg < 0) return false;
-        currentHealth -= dmg;
-        return currentHealth < 0;
-    }
-
-    @Override
-    public int getDefence() {
+    public int getDefence(Unit unit) {
         return 3;
     }
 
     @Override
-    public int getAttack() {
+    public int getAttack(Unit unit) {
         return 3;
     }
 
     @Override
-    public int getMovementSpeed() {
+    public int getMovementSpeed(Unit unit) {
         return 3;
     }
 
     @Override
-    public TextureRegion getTexture() {
+    public TextureRegion getTexture(Unit unit) {
         return tex;
     }
 }

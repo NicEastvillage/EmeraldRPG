@@ -126,7 +126,12 @@ public final class TransformTree<T> {
         return parent;
     }
 
+    /** Set transform's parent. Local position/rotation stays. */
     public void setParent(TransformTree<T> newParent) {
+        setParent(newParent, false);
+    }
+
+    public void setParent(TransformTree<T> newParent, boolean keepWorldPosition) {
         Vector2 prevWorldPos = getWorldPosition();
         float prevWorldRotation = getWorldRotation();
 
@@ -140,8 +145,10 @@ public final class TransformTree<T> {
             newParent.children.add(this);
         }
 
-        setWorldPosition(prevWorldPos);
-        setWorldRotation(prevWorldRotation);
+        if (keepWorldPosition) {
+            setWorldPosition(prevWorldPos);
+            setWorldRotation(prevWorldRotation);
+        }
     }
 
     public Set<TransformTree<T>> getChildren() {
