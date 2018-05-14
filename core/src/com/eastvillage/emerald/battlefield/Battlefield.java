@@ -7,6 +7,9 @@ import java.util.HashMap;
 
 public class Battlefield extends GameObject {
 
+    public static final int TILE_VERT = 13;
+    public static final int TILE_HOR = 18;
+
     private HashMap<Hex, Tile> map = new HashMap<>();
 
     public Battlefield() {
@@ -16,8 +19,19 @@ public class Battlefield extends GameObject {
     public Battlefield(TransformTree<GameObject> parent) {
         super(parent);
 
-        new Tile(new Hex(1, 1), transform);
-        new Tile(new Hex(2, 1), transform);
-        new Tile(new Hex(1, 2), transform);
+        createTiles();
+    }
+
+    private void createTiles() {
+        for (int y = 0; y < TILE_VERT; y++) {
+            int tiles_hor = TILE_HOR + ((y & 1) == 0 ? 1 : 0);
+            for (int x = 0; x < tiles_hor; x++) {
+                int q = x - y / 2;
+                int r = y;
+                Hex hex = new Hex(q, r);
+                Tile tile = new Tile(hex,transform);
+                map.put(hex, tile);
+            }
+        }
     }
 }

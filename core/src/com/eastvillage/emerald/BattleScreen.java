@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.eastvillage.emerald.battlefield.Battlefield;
+import com.eastvillage.emerald.battlefield.Tile;
 import com.eastvillage.engine.GameObject;
 import com.eastvillage.engine.TexRenderer;
 import com.eastvillage.math.Vector2;
@@ -22,6 +23,7 @@ public class BattleScreen implements Screen {
         this.game = game;
         camera = new OrthographicCamera(GameInfo.SCREEN_WIDTH, GameInfo.SCREEN_HEIGHT);
         camera.zoom = GameInfo.ZOOM;
+        camera.position.set(Tile.SPACING_WIDTH * Battlefield.TILE_HOR / 2f, Tile.SPACING_HEIGHT * Battlefield.TILE_VERT / 2f - Tile.SPACING_HEIGHT / 2f, 0);
         camera.update();
 
         root = new GameObject();
@@ -39,9 +41,8 @@ public class BattleScreen implements Screen {
         root.update();
 
         SpriteBatch batch = game.getBatch();
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0xBA/255f, 0xC3/255f, 0xA1/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.position.set(0, 0, 0);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 

@@ -8,10 +8,10 @@ import com.eastvillage.math.Vector2;
 
 public class Tile extends GameObject {
 
-    private static final int PIX_WIDTH = 32;
-    private static final int PIX_HEIGHT = 36;
-    private static final int SPACING_WIDTH = PIX_WIDTH;
-    private static final int SPACING_HEIGHT = PIX_HEIGHT - 8;
+    public static final int PIX_WIDTH = 32;
+    public static final int PIX_HEIGHT = 36;
+    public static final int SPACING_WIDTH = PIX_WIDTH;
+    public static final int SPACING_HEIGHT = PIX_HEIGHT - 8;
 
     private static final Texture texture = new Texture("grass.png");
 
