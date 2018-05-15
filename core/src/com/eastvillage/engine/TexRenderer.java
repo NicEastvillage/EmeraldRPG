@@ -18,8 +18,7 @@ public final class TexRenderer implements Component {
     }
 
     public TexRenderer(TextureRegion texReg, boolean shouldDispose) {
-        this.texReg = texReg;
-        this.shouldDispose = shouldDispose;
+        this(texReg, Vector2.ONE, shouldDispose);
     }
 
     public TexRenderer(Texture texture, float scaleX, float scaleY, boolean shouldDispose) {
@@ -36,7 +35,7 @@ public final class TexRenderer implements Component {
 
     public TexRenderer(TextureRegion texReg, Vector2 scale, boolean shouldDispose) {
         this.scale = scale;
-        this.texReg = texReg;
+        this.texReg = new TextureRegion(texReg);
         this.shouldDispose = shouldDispose;
     }
 
@@ -98,5 +97,9 @@ public final class TexRenderer implements Component {
         }
         this.texReg = sprite;
         this.shouldDispose = shouldDispose;
+    }
+
+    public void flipTex(boolean x, boolean y) {
+        texReg.flip(x, y);
     }
 }

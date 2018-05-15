@@ -24,7 +24,8 @@ public class Battlefield extends GameObject {
 
         createTiles();
 
-        new BattleUnit(new Unit(0, new Knight()), map.get(new Hex(4, 2)));
+        new BattleUnit(map.get(new Hex(4, 2)), new Unit(0, new Knight()), Allegiance.LEFT);
+        new BattleUnit(map.get(new Hex(7, 3)), new Unit(0, new Knight()), Allegiance.RIGHT);
     }
 
     private void createTiles() {

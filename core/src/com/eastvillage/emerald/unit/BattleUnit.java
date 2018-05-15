@@ -1,5 +1,6 @@
 package com.eastvillage.emerald.unit;
 
+import com.eastvillage.emerald.battlefield.Allegiance;
 import com.eastvillage.emerald.battlefield.Tile;
 import com.eastvillage.engine.GameObject;
 import com.eastvillage.engine.TexRenderer;
@@ -7,14 +8,20 @@ import com.eastvillage.math.Vector2;
 
 public class BattleUnit extends GameObject {
 
-    private Unit unit;
     private Tile tile;
+    private Unit unit;
+    private Allegiance allegiance;
 
-    public BattleUnit(Unit unit, Tile tile) {
-        this.unit = unit;
+    private TexRenderer texRenderer;
+
+    public BattleUnit(Tile tile, Unit unit, Allegiance allegiance) {
         setTile(tile);
+        this.unit = unit;
+        this.allegiance = allegiance;
 
-        addComponent(new TexRenderer(unit.getTexture(), false));
+        texRenderer = new TexRenderer(unit.getTexture(), false);
+        texRenderer.flipTex(allegiance.isSpriteFlipped(), false);
+        addComponent(texRenderer);
     }
 
     public void setTile(Tile tile) {
