@@ -1,20 +1,19 @@
 package com.eastvillage.emerald.unit;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.emerald.Assets;
 import com.eastvillage.emerald.EmeraldGame;
 
-public class Knight implements UnitType {
+public class Ranger implements UnitType {
 
     @Override
     public int getMaxHealth(Unit unit) {
-        return 30;
+        return 20;
     }
 
     @Override
     public int getDefence(Unit unit) {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -24,11 +23,11 @@ public class Knight implements UnitType {
 
     @Override
     public int getMovementSpeed(Unit unit) {
-        return 3;
+        return 2;
     }
 
     @Override
     public TextureRegion getTexture(Unit unit) {
-        return new TextureRegion((Texture) EmeraldGame.getAsset(Assets.KNIGHT));
+        return EmeraldGame.getAsset(Assets.RANGER);
     }
 }
