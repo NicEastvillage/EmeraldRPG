@@ -1,6 +1,5 @@
 package com.eastvillage.emerald.battlefield;
 
-import com.eastvillage.emerald.unit.BattleUnit;
 import com.eastvillage.emerald.unit.Knight;
 import com.eastvillage.emerald.unit.Unit;
 import com.eastvillage.engine.GameObject;

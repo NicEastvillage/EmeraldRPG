@@ -24,6 +24,9 @@ public class EmeraldGame extends Game {
 	    _instance = this;
 		batch = new SpriteBatch();
 		assetManager = new AssetManager();
+
+        BattleScreen.loadAssets(assetManager);
+        assetManager.finishLoading();
         setScreen(new BattleScreen(this));
 	}
 

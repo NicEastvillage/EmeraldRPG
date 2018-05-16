@@ -19,7 +19,6 @@ public class BattleScreen implements Screen {
 
     public BattleScreen(EmeraldGame game) {
         this.game = game;
-        loadAssets(game.getAssetManager());
 
         camera = new OrthographicCamera(GameInfo.SCREEN_WIDTH, GameInfo.SCREEN_HEIGHT);
         camera.zoom = GameInfo.ZOOM;
@@ -30,7 +29,7 @@ public class BattleScreen implements Screen {
         new Battlefield(root.transform);
     }
 
-    private void loadAssets(AssetManager manager) {
+    public static void loadAssets(AssetManager manager) {
         manager.load(Assets.GRASS, Texture.class);
 
         manager.load(Assets.KNIGHT, Texture.class);
