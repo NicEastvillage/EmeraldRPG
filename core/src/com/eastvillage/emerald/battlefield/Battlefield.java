@@ -1,6 +1,8 @@
 package com.eastvillage.emerald.battlefield;
 
 import com.eastvillage.emerald.unit.Knight;
+import com.eastvillage.emerald.unit.Priest;
+import com.eastvillage.emerald.unit.Ranger;
 import com.eastvillage.emerald.unit.Unit;
 import com.eastvillage.engine.GameObject;
 import com.eastvillage.engine.TransformTree;
@@ -24,7 +26,8 @@ public class Battlefield extends GameObject {
         createTiles();
 
         new BattleUnit(map.get(new Hex(4, 2)), new Unit(0, new Knight()), Allegiance.LEFT);
-        new BattleUnit(map.get(new Hex(7, 3)), new Unit(0, new Knight()), Allegiance.RIGHT);
+        new BattleUnit(map.get(new Hex(7, 3)), new Unit(0, new Priest()), Allegiance.RIGHT);
+        new BattleUnit(map.get(new Hex(6, 6)), new Unit(0, new Ranger()), Allegiance.RIGHT);
     }
 
     private void createTiles() {

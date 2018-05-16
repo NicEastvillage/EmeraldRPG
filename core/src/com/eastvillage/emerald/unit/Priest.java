@@ -1,5 +1,6 @@
 package com.eastvillage.emerald.unit;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.emerald.Assets;
 import com.eastvillage.emerald.EmeraldGame;
@@ -28,6 +29,6 @@ public class Priest implements UnitType {
 
     @Override
     public TextureRegion getTexture(Unit unit) {
-        return EmeraldGame.getAsset(Assets.PRIEST);
+        return new TextureRegion((Texture) EmeraldGame.getAsset(Assets.PRIEST));
     }
 }
