@@ -1,6 +1,4 @@
-package com.eastvillage.emerald.battlefield;
-
-import com.eastvillage.math.Vector2Int;
+package com.eastvillage.emerald.battle.battlefield;
 
 import java.util.Objects;
 

@@ -1,4 +1,4 @@
-package com.eastvillage.emerald.battlefield;
+package com.eastvillage.emerald.battle.battlefield;
 
 public enum HexDirection {
     E(1, 0),

@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.eastvillage.emerald.battlefield.Battlefield;
-import com.eastvillage.emerald.battlefield.Tile;
+import com.eastvillage.emerald.battle.battlefield.Battlefield;
+import com.eastvillage.emerald.battle.battlefield.Tile;
 import com.eastvillage.engine.GameObject;
 
 public class BattleScreen implements Screen {

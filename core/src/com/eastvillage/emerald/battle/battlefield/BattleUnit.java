@@ -1,11 +1,9 @@
-package com.eastvillage.emerald.battlefield;
+package com.eastvillage.emerald.battle.battlefield;
 
-import com.eastvillage.emerald.battlefield.Allegiance;
-import com.eastvillage.emerald.battlefield.Tile;
+import com.eastvillage.emerald.battle.Allegiance;
 import com.eastvillage.emerald.unit.Unit;
 import com.eastvillage.engine.GameObject;
 import com.eastvillage.engine.TexRenderer;
-import com.eastvillage.math.Vector2;
 
 public class BattleUnit extends GameObject {
 

@@ -1,5 +1,6 @@
-package com.eastvillage.emerald.battlefield;
+package com.eastvillage.emerald.battle.battlefield;
 
+import com.eastvillage.emerald.battle.Allegiance;
 import com.eastvillage.emerald.unit.Knight;
 import com.eastvillage.emerald.unit.Priest;
 import com.eastvillage.emerald.unit.Ranger;

@@ -1,4 +1,4 @@
-package com.eastvillage.emerald.battlefield;
+package com.eastvillage.emerald.battle;
 
 public enum Allegiance {
     LEFT(false),
