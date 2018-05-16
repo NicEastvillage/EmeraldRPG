@@ -2,16 +2,14 @@ package com.eastvillage.emerald;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector3;
 import com.eastvillage.emerald.battlefield.Battlefield;
 import com.eastvillage.emerald.battlefield.Tile;
 import com.eastvillage.engine.GameObject;
-import com.eastvillage.engine.TexRenderer;
-import com.eastvillage.math.Vector2;
 
 public class BattleScreen implements Screen {
 
@@ -21,6 +19,8 @@ public class BattleScreen implements Screen {
 
     public BattleScreen(EmeraldGame game) {
         this.game = game;
+        loadAssets(game.getAssetManager());
+
         camera = new OrthographicCamera(GameInfo.SCREEN_WIDTH, GameInfo.SCREEN_HEIGHT);
         camera.zoom = GameInfo.ZOOM;
         camera.position.set(Tile.SPACING_WIDTH * Battlefield.TILE_HOR / 2f, Tile.SPACING_HEIGHT * Battlefield.TILE_VERT / 2f - Tile.SPACING_HEIGHT / 2f, 0);
@@ -28,6 +28,14 @@ public class BattleScreen implements Screen {
 
         root = new GameObject();
         new Battlefield(root.transform);
+    }
+
+    private void loadAssets(AssetManager manager) {
+        manager.load(Assets.GRASS, Texture.class);
+
+        manager.load(Assets.KNIGHT, Texture.class);
+        manager.load(Assets.RANGER, Texture.class);
+        manager.load(Assets.PRIEST, Texture.class);
     }
 
     @Override
@@ -76,5 +84,6 @@ public class BattleScreen implements Screen {
     @Override
     public void dispose() {
         root.dispose();
+        game.getAssetManager().clear();
     }
 }

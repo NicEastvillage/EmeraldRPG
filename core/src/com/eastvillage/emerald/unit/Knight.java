@@ -2,10 +2,10 @@ package com.eastvillage.emerald.unit;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.eastvillage.emerald.Assets;
+import com.eastvillage.emerald.EmeraldGame;
 
 public class Knight implements UnitType {
-
-    private static final TextureRegion tex = new TextureRegion(new Texture("Knight.png"));
 
     @Override
     public int getMaxHealth(Unit unit) {
@@ -29,6 +29,6 @@ public class Knight implements UnitType {
 
     @Override
     public TextureRegion getTexture(Unit unit) {
-        return tex;
+        return new TextureRegion((Texture) EmeraldGame.getAsset(Assets.KNIGHT));
     }
 }
