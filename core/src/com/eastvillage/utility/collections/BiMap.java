@@ -1,4 +1,4 @@
-package com.eastvillage.collections;
+package com.eastvillage.utility.collections;
 
 import java.util.Collection;
 import java.util.HashMap;

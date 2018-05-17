@@ -1,6 +1,6 @@
 package com.eastvillage.engine;
 
-import com.eastvillage.math.Vector2;
+import com.eastvillage.utility.math.Vector2;
 
 import java.util.HashSet;
 import java.util.Set;

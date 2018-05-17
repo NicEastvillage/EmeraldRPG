@@ -3,7 +3,7 @@ package com.eastvillage.engine;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.eastvillage.math.Vector2;
+import com.eastvillage.utility.math.Vector2;
 
 public final class TexRenderer implements Component {
 

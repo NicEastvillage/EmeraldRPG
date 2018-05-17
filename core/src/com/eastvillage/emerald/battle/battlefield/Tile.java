@@ -7,7 +7,7 @@ import com.eastvillage.emerald.EmeraldGame;
 import com.eastvillage.engine.GameObject;
 import com.eastvillage.engine.TexRenderer;
 import com.eastvillage.engine.TransformTree;
-import com.eastvillage.math.Vector2;
+import com.eastvillage.utility.math.Vector2;
 
 public class Tile extends GameObject {
 

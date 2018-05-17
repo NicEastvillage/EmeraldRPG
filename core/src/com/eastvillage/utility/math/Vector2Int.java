@@ -1,4 +1,4 @@
-package com.eastvillage.math;
+package com.eastvillage.utility.math;
 
 import java.util.Objects;
 
