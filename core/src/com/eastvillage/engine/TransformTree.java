@@ -115,7 +115,7 @@ public final class TransformTree<T> {
 
     public void setWorldOrientation(Vector2 orientation) {
         if (parent == null) transform.setOrientation(orientation.normalized());
-        else transform.setOrientation(orientation.rotate(-parent.getWorldOrientation().angleRad()));
+        else transform.setOrientation(orientation.rotateDeg(-parent.getWorldOrientation().angleRad()));
     }
 
     public void setLocalOrientation(Vector2 orientation) {

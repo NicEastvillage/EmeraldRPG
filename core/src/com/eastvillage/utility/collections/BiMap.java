@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-/** The BiMap is a bi-directional map that maps such that if a key is mapped to a value, that value is also mapped
+/** The BiMap is a bi-directional map such that if a key is mapped to a value, that value is also mapped
  * to that key. Use the inv() method to retrieve the inverted map. */
 public class BiMap<K, V> implements Map<K, V> {
 
