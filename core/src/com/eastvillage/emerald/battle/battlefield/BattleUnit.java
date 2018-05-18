@@ -7,25 +7,18 @@ import com.eastvillage.engine.TexRenderer;
 
 public class BattleUnit extends GameObject {
 
-    private Tile tile;
     private Unit unit;
     private Allegiance allegiance;
 
     private TexRenderer texRenderer;
 
-    public BattleUnit(Tile tile, Unit unit, Allegiance allegiance) {
-        setTile(tile);
+    public BattleUnit(Unit unit, Allegiance allegiance) {
         this.unit = unit;
         this.allegiance = allegiance;
 
         texRenderer = new TexRenderer(unit.getTexture(), false);
         texRenderer.flipTex(allegiance.isSpriteFlipped(), false);
         addComponent(texRenderer);
-    }
-
-    public void setTile(Tile tile) {
-        this.tile = tile;
-        transform.setParent(tile.transform);
     }
 
     public Unit getUnit() {

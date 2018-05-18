@@ -17,6 +17,11 @@ public class BiMap<K, V> implements Map<K, V> {
         two = new HashMap<>();
     }
 
+    /** Construct a clone of a BiMap. */
+    public BiMap(BiMap<K, V> biMap) {
+        this(new HashMap<>(biMap.one), new HashMap<>(biMap.two));
+    }
+
     private BiMap(HashMap<K, V> one, HashMap<V, K> two) {
         this.one = one;
         this.two = two;
@@ -55,9 +60,16 @@ public class BiMap<K, V> implements Map<K, V> {
 
     @Override
     public V put(K key, V value) {
-        V prev = one.put(key, value);
+        V prevValue = one.get(key);
+        K prevKey = two.get(value);
+
+        one.put(prevKey, null);
+        two.put(prevValue, null);
+
+        one.put(key, value);
         two.put(value, key);
-        return prev;
+
+        return prevValue;
     }
 
     @Override
