@@ -1,6 +1,6 @@
 package com.eastvillage.emerald.battle;
 
-import com.eastvillage.emerald.unit.Unit;
+import com.eastvillage.emerald.battle.battlefield.BattleUnit;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -8,28 +8,28 @@ import java.util.LinkedList;
 
 public class TurnController {
 
-    private LinkedList<Unit> queue;
+    private LinkedList<BattleUnit> queue;
     private LinkedList<TurnQueueChangeListener> listeners;
 
-    public TurnController(Collection<Unit> units) {
+    public TurnController(Collection<BattleUnit> units) {
         queue = new LinkedList<>(units);
         Collections.shuffle(queue);
 
         listeners = new LinkedList<>();
     }
 
-    public Unit current() {
+    public BattleUnit current() {
         return queue.getFirst();
     }
 
-    public Unit next() {
-        Unit cur = queue.pollFirst();
+    public BattleUnit next() {
+        BattleUnit cur = queue.pollFirst();
         queue.addLast(cur);
         updateListeners();
         return queue.getFirst();
     }
 
-    public boolean remove(Unit unit) {
+    public boolean remove(BattleUnit unit) {
         boolean remove = queue.remove(unit);
         updateListeners();
         return remove;

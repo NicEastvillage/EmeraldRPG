@@ -11,6 +11,14 @@ public class BattleController {
 
     public BattleController(Battlefield battlefield) {
         this.battlefield = battlefield;
-        // turnController = new TurnController(...)
+        turnController = new TurnController(battlefield.getAllUnits());
+    }
+
+    public Battlefield getBattlefield() {
+        return battlefield;
+    }
+
+    public TurnController getTurnController() {
+        return turnController;
     }
 }
