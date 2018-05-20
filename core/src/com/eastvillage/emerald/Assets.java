@@ -7,4 +7,6 @@ public class Assets {
     public static final String PRIEST = "priest.png";
 
     public static final String GRASS = "grass.png";
+    public static final String INDICATOR_MOVE = "valid move indicator.png";
+    public static final String INDICATOR_ATTACK = "valid attack indicator.png";
 }
