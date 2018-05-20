@@ -18,9 +18,10 @@ public class Tile extends GameObject {
     public static final int SPACING_HEIGHT = PIX_HEIGHT - 8;
 
     public final Hex hex;
-    public TexRenderer baseTexRenderer;
-    public TexRenderer indicatorTexRenderer;
-    public TextureRegion indicatorValidMove, indicatorValidAttack;
+
+    private TexRenderer baseTexRenderer;
+    private TexRenderer indicatorTexRenderer;
+    private TextureRegion indicatorValidMove, indicatorValidAttack;
 
     public Tile(Hex hex, TransformTree<GameObject> parent) {
         this.hex = hex;
@@ -34,7 +35,7 @@ public class Tile extends GameObject {
         indicatorValidMove = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.INDICATOR_MOVE));
         indicatorValidAttack = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.INDICATOR_ATTACK));
         indicatorTexRenderer = new TexRenderer(indicatorValidMove, false);
-        indicatorTexRenderer.enable(false);
+        //indicatorTexRenderer.enable(false);
         addComponent(indicatorTexRenderer);
     }
 

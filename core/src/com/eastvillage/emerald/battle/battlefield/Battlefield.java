@@ -51,6 +51,10 @@ public class Battlefield extends GameObject {
         }
     }
 
+    public Tile getTile(Hex hex) {
+        return map.get(hex);
+    }
+
     /** Returns whether is hex is within the battlefield. */
     public boolean isWithin(Hex hex) {
         return map.containsKey(hex);
@@ -101,11 +105,14 @@ public class Battlefield extends GameObject {
     }
 
     /** Convert a vector to a hex on the battlefield. The vector must be in world space. */
-    public Hex pointToHex(Vector2 point) {
-        Vector2 rel = point.sub(transform.getWorldPosition()); // We assume the battlefield has no rotation
+    public Hex pointToHex(float pointX, float pointY) {
+        // We assume the battlefield has no rotation
+        Vector2 fieldPos = transform.getWorldPosition();
+        float x = pointX - fieldPos.x;
+        float y = pointY - fieldPos.y;
 
-        float q = 1f/Tile.SPACING_WIDTH * rel.x  -  1f/(4*Tile.SPACING_HEIGHT) * rel.y;
-        float r = 0                              +  1f/Tile.SPACING_HEIGHT * rel.y;
+        float q = 1f/Tile.SPACING_WIDTH * x  -  1f/(4*Tile.SPACING_HEIGHT) * y;
+        float r = 0                              +  1f/Tile.SPACING_HEIGHT * y;
 
         return Hex.fromRounding(q, r);
     }

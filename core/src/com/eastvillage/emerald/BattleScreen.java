@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.eastvillage.emerald.battle.BattleController;
 import com.eastvillage.emerald.battle.battlefield.Battlefield;
 import com.eastvillage.emerald.battle.battlefield.Tile;
 import com.eastvillage.engine.GameObject;
@@ -26,7 +27,8 @@ public class BattleScreen implements Screen {
         camera.update();
 
         root = new GameObject();
-        new Battlefield(root.transform);
+        Battlefield battlefield = new Battlefield(root.transform);
+        new BattleController(battlefield, camera);
     }
 
     public static void loadAssets(AssetManager manager) {
