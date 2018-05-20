@@ -111,8 +111,8 @@ public class Battlefield extends GameObject {
         float x = pointX - fieldPos.x;
         float y = pointY - fieldPos.y;
 
-        float q = 1f/Tile.SPACING_WIDTH * x  -  1f/(4*Tile.SPACING_HEIGHT) * y;
-        float r = 0                              +  1f/Tile.SPACING_HEIGHT * y;
+        float q = 1f/Tile.SPACING_WIDTH * x  -  1f/(2*Tile.SPACING_HEIGHT) * y;
+        float r = 0                          +  1f/Tile.SPACING_HEIGHT * y;
 
         return Hex.fromRounding(q, r);
     }
