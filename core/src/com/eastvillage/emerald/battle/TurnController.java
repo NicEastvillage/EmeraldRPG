@@ -9,17 +9,21 @@ import java.util.LinkedList;
 public class TurnController {
 
     private LinkedList<BattleUnit> queue;
-    private LinkedList<TurnQueueChangeListener> queueListeners;
+    private LinkedList<TurnQueueListener> queueListeners;
+
+    private Turn current;
 
     public TurnController(Collection<BattleUnit> units) {
         queue = new LinkedList<>(units);
         Collections.shuffle(queue);
 
         queueListeners = new LinkedList<>();
+
+        current = new Turn(queue.getFirst(), this);
     }
 
-    public BattleUnit currentUnit() {
-        return queue.getFirst();
+    public Turn current()  {
+        return current;
     }
 
     /** Returns the size of the turn queue. */
@@ -27,36 +31,59 @@ public class TurnController {
         return queue.size();
     }
 
-    /** Cycles the queue, so that the first unit becomes the last unit. This method does not check the turn state.
+    /** Cycles the queue and starts next units turn. As a result first unit becomes the last unit in the queue.
+     * This method does not check the turn state.
      * @return the now current unit. */
-    public BattleUnit cycleQueue() {
+    public void cycleQueue() {
         BattleUnit cur = queue.pollFirst();
         queue.addLast(cur);
-        updateQueueListeners();
-        return currentUnit();
+
+        current = new Turn(queue.getFirst(), this);
+
+        updateQueueCycleListeners();
+    }
+
+    /** Adds a unit to the turn queue. The unit will be the last in the queue. */
+    public void add(BattleUnit unit) {
+        if (unit == null) throw new IllegalArgumentException("null cannot be added to turn queue.");
+        queue.addLast(unit);
+        updateQueueModifiedListeners();
     }
 
     /** Removes a unit from the turn queue.
      * @return true, if the unit was in the queue and now removed. */
     public boolean remove(BattleUnit unit) {
+        if (current.getUnit() == unit) throw new TurnQueueChangeException("Can't remove unit from turn queue, because it is currently that unit's turn");
         boolean remove = queue.remove(unit);
-        updateQueueListeners();
+        updateQueueModifiedListeners();
         return remove;
     }
 
-    public void addQueueListener(TurnQueueChangeListener listener) {
+    public void addQueueListener(TurnQueueListener listener) {
         queueListeners.add(listener);
     }
 
     /** Returns true, if the listener was registered and removed. */
-    public boolean removeQueueListener(TurnQueueChangeListener listener) {
+    public boolean removeQueueListener(TurnQueueListener listener) {
         return queueListeners.remove(listener);
     }
 
     /** Call this whenever the queue changes to update any listeners. */
-    private void updateQueueListeners() {
-        for (TurnQueueChangeListener listener : queueListeners) {
-            listener.onQueueChange(this);
+    private void updateQueueCycleListeners() {
+        for (TurnQueueListener listener : queueListeners) {
+            listener.onQueueCycle(this);
         }
+    }
+
+    /** Call this whenever the queue is modified to update any listeners. */
+    private void updateQueueModifiedListeners() {
+        for (TurnQueueListener listener : queueListeners) {
+            listener.onQueueModified(this);
+        }
+    }
+
+    /** Returns a copy of the turn queue. Changes to that list does not affect the turn controller. */
+    public LinkedList<BattleUnit> getQueueCopy() {
+        return new LinkedList<>(queue);
     }
 }
