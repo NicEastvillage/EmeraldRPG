@@ -16,6 +16,28 @@ public class Hex {
         this.z = -x - y;
     }
 
+    /** Construct a Hex from rounding two floats that correspond to x and y. */
+    public static Hex fromRounding(float q, float r) {
+        float s = -q - r;
+
+        int rx = Math.round(q);
+        int ry = Math.round(r);
+        int rz = Math.round(s);
+
+        float x_diff = Math.abs(rx - q);
+        float y_diff = Math.abs(ry - r);
+        float z_diff = Math.abs(rz - s);
+
+        // So we reset the component with the largest change back to what the constraint rx + ry + rz = 0 requires
+        if (x_diff > y_diff && x_diff > z_diff) {
+            rx = -ry - rz;
+        } else if (y_diff > z_diff) {
+            ry = -rx - rz;
+        }
+
+        return new Hex(rx, ry);
+    }
+
     public float lenManhattan() {
         return (Math.abs(x) + Math.abs(y) + Math.abs(z)) / 2;
     }

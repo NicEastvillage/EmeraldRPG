@@ -8,10 +8,12 @@ import com.eastvillage.emerald.unit.Unit;
 import com.eastvillage.engine.GameObject;
 import com.eastvillage.engine.TransformTree;
 import com.eastvillage.utility.collections.BiMap;
+import com.eastvillage.utility.math.Vector2;
 
 import java.util.HashMap;
 import java.util.Set;
 
+/** A battlefield is a game object and responsible for displaying and positioning the tiles and units of the battle. */
 public class Battlefield extends GameObject {
 
     public static final int TILE_VERT = 13;
@@ -96,5 +98,15 @@ public class Battlefield extends GameObject {
     /** Returns a bi-directional map of BattleUnits and Tiles. */
     public BiMap<BattleUnit, Hex> getUnitMap() {
         return new BiMap<>(unitMap);
+    }
+
+    /** Convert a vector to a hex on the battlefield. The vector must be in world space. */
+    public Hex pointToHex(Vector2 point) {
+        Vector2 rel = point.sub(transform.getWorldPosition()); // We assume the battlefield has no rotation
+
+        float q = 1f/Tile.SPACING_WIDTH * rel.x  -  1f/(4*Tile.SPACING_HEIGHT) * rel.y;
+        float r = 0                              +  1f/Tile.SPACING_HEIGHT * rel.y;
+
+        return Hex.fromRounding(q, r);
     }
 }
