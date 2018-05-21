@@ -3,13 +3,13 @@ package com.eastvillage.engine;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.eastvillage.utility.math.Vector2;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 public class GameObject {
 
     public final TransformTree<GameObject> transform;
 
-    private HashSet<Component> components = new HashSet<>();
+    private ArrayList<Component> components = new ArrayList<>();
     private boolean enabled = true;
 
     public GameObject() {
