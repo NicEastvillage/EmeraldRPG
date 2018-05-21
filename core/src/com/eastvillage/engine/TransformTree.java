@@ -2,7 +2,7 @@ package com.eastvillage.engine;
 
 import com.eastvillage.utility.math.Vector2;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Set;
 
 public final class TransformTree<T> {
@@ -10,7 +10,7 @@ public final class TransformTree<T> {
     public T target;
     private Transform transform;
     private TransformTree<T> parent;
-    private HashSet<TransformTree<T>> children = new HashSet<>();
+    private ArrayList<TransformTree<T>> children = new ArrayList<>();
 
     public TransformTree(T target) {
         this(target, Vector2.ZERO, 0, null);
@@ -151,7 +151,7 @@ public final class TransformTree<T> {
         }
     }
 
-    public Set<TransformTree<T>> getChildren() {
-        return new HashSet<>(children);
+    public ArrayList<TransformTree<T>> getChildren() {
+        return new ArrayList<>(children);
     }
 }
