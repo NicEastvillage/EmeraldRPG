@@ -35,7 +35,7 @@ public class Tile extends GameObject {
         indicatorValidMove = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.INDICATOR_MOVE));
         indicatorValidAttack = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.INDICATOR_ATTACK));
         indicatorTexRenderer = new TexRenderer(indicatorValidMove, false);
-        //indicatorTexRenderer.enable(false);
+        indicatorTexRenderer.enable(false);
         addComponent(indicatorTexRenderer);
     }
 

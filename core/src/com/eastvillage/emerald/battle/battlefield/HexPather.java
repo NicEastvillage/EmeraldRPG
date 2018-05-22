@@ -13,6 +13,7 @@ public class HexPather {
 
     private HashMap<Hex, Integer> stepsTaken;
     private HashMap<Hex, Hex> cameFrom;
+    private HashSet<Hex> reachableHexes;
 
     /** The HexPather class is used to find all moves a unit can do. It will use dijkstra's algorithm to find the shortest
      * path to all the hexes within range. An obstacle function can be defined to marked hexes as impassable.
@@ -32,11 +33,12 @@ public class HexPather {
     private void dijkstra() {
         stepsTaken = new HashMap<>();
         cameFrom = new HashMap<>();
+        reachableHexes = new HashSet<>();
 
         HashSet<Hex> closedSet = new HashSet<>();
         TreeSet<Hex> openSet = new TreeSet<>((a, b) -> {
             if (a == b) return 0;
-            int diff = stepsTaken.get(a) - stepsTaken.get(b);
+            int diff = stepsTaken.getOrDefault(a, Integer.MAX_VALUE) - stepsTaken.getOrDefault(b, Integer.MAX_VALUE);
             return diff > 0 ? 1 : -1;
         });
 
@@ -47,6 +49,7 @@ public class HexPather {
             Hex cur = openSet.pollFirst();
 
             closedSet.add(cur);
+            reachableHexes.add(cur);
 
             // Last step?
             if (stepsTaken.get(cur) == depth)
@@ -126,5 +129,9 @@ public class HexPather {
      * the start hex. */
     public Hex getPrev(Hex hex) {
         return cameFrom.get(hex);
+    }
+
+    public HashSet<Hex> getAllReachableHexes() {
+        return new HashSet<>(reachableHexes);
     }
 }
