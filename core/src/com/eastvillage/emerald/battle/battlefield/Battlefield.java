@@ -67,8 +67,8 @@ public class Battlefield extends GameObject {
     }
 
     /** Place a unit on a hex and set it's parent's transform to the associated tile. A unit can only be on one
-     * hex at the time. If unit is null, the unit on the hex (if any) will be removed and returned.
-     * Will throw an exception, if hex is not within battlefield.
+     * hex at the time, so if already placed, it will be moved. If unit is null, the unit on the hex (if any)
+     * will be removed and returned. Will throw an exception, if hex is not within battlefield.
      * @return the unit previously placed on the hex. */
     public BattleUnit placeUnit(Hex hex, BattleUnit unit) {
         if (!isWithin(hex)) throw new NotWithinBattlefieldException(hex, "Hex " + hex.toString() + " is not within the battlefield.");

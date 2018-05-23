@@ -3,6 +3,7 @@ package com.eastvillage.emerald.battle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.eastvillage.emerald.battle.battlefield.*;
+import javafx.scene.input.MouseButton;
 
 import java.util.HashSet;
 import java.util.function.Function;
@@ -17,7 +18,10 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
     public BattleController(Battlefield battlefield, OrthographicCamera camera) {
         this.battlefield = battlefield;
+
         turnController = new TurnController(battlefield.getAllUnits());
+        turnController.addQueueListener(this);
+
         inputProcessor = new BattlefieldInputProcessor(battlefield, camera);
         inputProcessor.addListener(this);
         Gdx.input.setInputProcessor(inputProcessor);
@@ -63,7 +67,12 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
     @Override
     public void onTileClicked(Tile tile, int button) {
-
+        if (button == 0) {
+            if (reachableHexes.contains(tile.hex)) {
+                battlefield.placeUnit(tile.hex, turnController.current().getUnit());
+                turnController.cycleQueue();
+            }
+        }
     }
 
     @Override
