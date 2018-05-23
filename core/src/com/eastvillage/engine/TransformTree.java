@@ -46,6 +46,11 @@ public final class TransformTree<T> {
         setWorldOrientation(orientation);
     }
 
+    /** Returns where a given point is relative to this transform. */
+    public Vector2 getPointRelative(Vector2 point) {
+        return getWorldTransform().invs().mul(point);
+    }
+
     public void setWorld(Transform transform) {
         Transform relativeToParent = parent.getWorldTransform().invs().mul(transform);
         setLocal(relativeToParent);

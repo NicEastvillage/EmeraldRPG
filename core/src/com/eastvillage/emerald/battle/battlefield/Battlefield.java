@@ -55,7 +55,7 @@ public class Battlefield extends GameObject {
         return map.get(hex);
     }
 
-    /** Returns whether is hex is within the battlefield. */
+    /** Returns true if the given hex is within the battlefield. */
     public boolean isWithin(Hex hex) {
         return map.containsKey(hex);
     }
