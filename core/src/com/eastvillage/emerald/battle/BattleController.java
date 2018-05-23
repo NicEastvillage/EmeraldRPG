@@ -3,7 +3,6 @@ package com.eastvillage.emerald.battle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.eastvillage.emerald.battle.battlefield.*;
-import com.eastvillage.emerald.unit.Unit;
 
 import java.util.HashSet;
 import java.util.function.Function;
@@ -23,25 +22,28 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
         inputProcessor.addListener(this);
         Gdx.input.setInputProcessor(inputProcessor);
 
-        showValidMoves(turnController.current().getUnit());
+        highlightValidMoves(turnController.current().getUnit());
     }
 
-    private void showValidMoves(BattleUnit unit) {
+    /** Highlight the tiles that are valid moves for the given unit. The previously highlighted tiles will un-highlighted. */
+    private void highlightValidMoves(BattleUnit unit) {
         hideValidMoves();
 
         Hex start = battlefield.getPositionOf(unit);
         int movement = unit.getUnit().getMovementSpeed();
-        Function<Hex, Boolean> impassable = hex -> !battlefield.isWithin(hex) && battlefield.isOccupied(hex);
+        Function<Hex, Boolean> impassable = hex -> !battlefield.isWithin(hex) || battlefield.isOccupied(hex);
         HexPather pather = new HexPather(start, movement, impassable);
 
         pather.dijkstra();
         reachableHexes = pather.getAllReachableHexes();
+        reachableHexes.remove(start);
 
         for (Hex hex : reachableHexes) {
             battlefield.getTile(hex).showIndicators(true, false);
         }
     }
 
+    /** Remove the highlight from reachable tiles. */
     private void hideValidMoves() {
         if (reachableHexes == null) return;
         for (Hex hex : reachableHexes) {
@@ -66,7 +68,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
     @Override
     public void onQueueCycle(TurnController turnController) {
-        showValidMoves(turnController.current().getUnit());
+        highlightValidMoves(turnController.current().getUnit());
     }
 
     @Override
