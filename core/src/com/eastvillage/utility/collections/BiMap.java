@@ -65,8 +65,8 @@ public class BiMap<K, V> implements Map<K, V> {
         V prevValue = one.get(key);
         K prevKey = two.get(value);
 
-        if (prevKey != null) one.put(prevKey, null);
-        if (prevValue != null) two.put(prevValue, null);
+        if (prevKey != null) one.remove(prevKey);
+        if (prevValue != null) two.remove(prevValue);
 
         one.put(key, value);
         two.put(value, key);

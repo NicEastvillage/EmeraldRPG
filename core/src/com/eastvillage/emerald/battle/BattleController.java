@@ -3,6 +3,7 @@ package com.eastvillage.emerald.battle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.eastvillage.emerald.battle.battlefield.*;
+import com.eastvillage.utility.math.Vector2;
 import javafx.scene.input.MouseButton;
 
 import java.util.HashSet;
@@ -69,7 +70,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     public void onTileClicked(Tile tile, int button) {
         if (button == 0) {
             if (reachableHexes.contains(tile.hex)) {
-                battlefield.placeUnit(tile.hex, turnController.current().getUnit());
+                new UnitMover(battlefield.transform, turnController.current().getUnit(), battlefield, tile);
                 turnController.cycleQueue();
             }
         }
