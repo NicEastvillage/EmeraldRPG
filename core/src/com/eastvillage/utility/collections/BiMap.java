@@ -1,9 +1,7 @@
 package com.eastvillage.utility.collections;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /** The BiMap is a bi-directional map such that if a key is mapped to a value, that value is also mapped
  * to that key. Use the inv() method to retrieve the inverted map. */
@@ -55,16 +53,20 @@ public class BiMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(Object key) {
+        if (key == null) return null;
         return one.get(key);
     }
 
     @Override
     public V put(K key, V value) {
+        if (key == null) return null;
+        if (value == null) return remove(key);
+
         V prevValue = one.get(key);
         K prevKey = two.get(value);
 
-        one.put(prevKey, null);
-        two.put(prevValue, null);
+        if (prevKey != null) one.put(prevKey, null);
+        if (prevValue != null) two.put(prevValue, null);
 
         one.put(key, value);
         two.put(value, key);

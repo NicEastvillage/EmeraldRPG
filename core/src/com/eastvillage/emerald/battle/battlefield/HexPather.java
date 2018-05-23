@@ -26,11 +26,11 @@ public class HexPather {
         this.depth = depth;
         this.isObstacleFunc = isObstacleFunc;
 
-        dijkstra();
+        //dijkstra();
     }
 
     /** Map all reachable hexes using dijkstra's algorithm. Results are stored in {@code stepsTaken} and {@code cameFrom}. */
-    private void dijkstra() {
+    public void dijkstra() {
         stepsTaken = new HashMap<>();
         cameFrom = new HashMap<>();
         reachableHexes = new HashSet<>();

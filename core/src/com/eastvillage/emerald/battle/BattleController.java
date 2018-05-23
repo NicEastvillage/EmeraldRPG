@@ -6,6 +6,7 @@ import com.eastvillage.emerald.battle.battlefield.*;
 import com.eastvillage.emerald.unit.Unit;
 
 import java.util.HashSet;
+import java.util.function.Function;
 
 public class BattleController implements BattlefieldInputListener, TurnQueueListener {
 
@@ -28,9 +29,12 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     private void showValidMoves(BattleUnit unit) {
         hideValidMoves();
 
-        HexPather pather = new HexPather(battlefield.getPositionOf(unit), unit.getUnit().getMovementSpeed(),
-                hex -> !battlefield.isWithin(hex) && battlefield.isOccupied(hex));
+        Hex start = battlefield.getPositionOf(unit);
+        int movement = unit.getUnit().getMovementSpeed();
+        Function<Hex, Boolean> impassable = hex -> !battlefield.isWithin(hex) && battlefield.isOccupied(hex);
+        HexPather pather = new HexPather(start, movement, impassable);
 
+        pather.dijkstra();
         reachableHexes = pather.getAllReachableHexes();
 
         for (Hex hex : reachableHexes) {
