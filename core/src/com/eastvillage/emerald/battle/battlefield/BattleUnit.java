@@ -16,8 +16,9 @@ public class BattleUnit extends GameObject {
         this.unit = unit;
         this.allegiance = allegiance;
 
-        texRenderer = new TexRenderer(unit.getTexture(), false);
+        texRenderer = new TexRenderer(transform, unit.getTexture(), false);
         texRenderer.flipTex(allegiance.isSpriteFlipped(), false);
+        texRenderer.setZ(1);
         addComponent(texRenderer);
     }
 

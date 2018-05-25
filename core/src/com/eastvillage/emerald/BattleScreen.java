@@ -11,12 +11,14 @@ import com.eastvillage.emerald.battle.BattleController;
 import com.eastvillage.emerald.battle.battlefield.Battlefield;
 import com.eastvillage.emerald.battle.battlefield.Tile;
 import com.eastvillage.engine.GameObject;
+import com.eastvillage.engine.LayeredDraw;
 
 public class BattleScreen implements Screen {
 
     private EmeraldGame game;
     private OrthographicCamera camera;
     private GameObject root;
+    private LayeredDraw layeredDraw = new LayeredDraw();
 
     public BattleScreen(EmeraldGame game) {
         this.game = game;
@@ -59,9 +61,11 @@ public class BattleScreen implements Screen {
 
         batch.begin();
 
-        root.draw(batch);
+        root.registerDraws(layeredDraw);
+        layeredDraw.draw(batch);
 
         batch.end();
+        layeredDraw.clear();
     }
 
     @Override

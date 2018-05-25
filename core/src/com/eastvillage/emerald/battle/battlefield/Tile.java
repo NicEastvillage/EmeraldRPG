@@ -29,12 +29,12 @@ public class Tile extends GameObject {
         transform.setWorldPosition(new Vector2(hex.x * SPACING_WIDTH + hex.y * SPACING_WIDTH / 2, hex.y * SPACING_HEIGHT));
 
         TextureRegion baseTexture = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.GRASS));
-        baseTexRenderer = new TexRenderer(baseTexture, false);
+        baseTexRenderer = new TexRenderer(transform, baseTexture, false);
         addComponent(baseTexRenderer);
 
         indicatorValidMove = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.INDICATOR_MOVE));
         indicatorValidAttack = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.INDICATOR_ATTACK));
-        indicatorTexRenderer = new TexRenderer(indicatorValidMove, false);
+        indicatorTexRenderer = new TexRenderer(transform, indicatorValidMove, false);
         indicatorTexRenderer.enable(false);
         addComponent(indicatorTexRenderer);
     }

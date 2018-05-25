@@ -7,27 +7,31 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.utility.math.Vector2;
 
-public class Animator implements Component {
+public class Animator implements Component, ZDrawable {
 
     private boolean enabled = true;
 
+    private TransformTree<GameObject> transform;
     private Vector2 scale = Vector2.ONE;
     private Texture texture;
     private boolean shouldDispose;
 
+    private int z = 0;
+
     private float time = 0;
     private Animation<TextureRegion> animation;
 
-    public Animator(Texture texture, int columns, int rows, float secondsPerFrame, Animation.PlayMode playMode, boolean shouldDispose) {
-        this(texture, columns, rows, secondsPerFrame, new Vector2(1, 1), playMode, shouldDispose);
+    public Animator(Texture texture, int columns, int rows, float secondsPerFrame, Animation.PlayMode playMode, boolean shouldDispose, TransformTree<GameObject> transform) {
+        this(texture, columns, rows, secondsPerFrame, new Vector2(1, 1), playMode, shouldDispose, transform);
     }
 
-    public Animator(Texture texture, int columns, int rows, float secondsPerFrame, float scaleX, float scaleY, Animation.PlayMode playMode, boolean shouldDispose) {
-        this(texture, columns, rows, secondsPerFrame, new Vector2(scaleX, scaleY), playMode, shouldDispose);
+    public Animator(Texture texture, int columns, int rows, float secondsPerFrame, float scaleX, float scaleY, Animation.PlayMode playMode, boolean shouldDispose, TransformTree<GameObject> transform) {
+        this(texture, columns, rows, secondsPerFrame, new Vector2(scaleX, scaleY), playMode, shouldDispose, transform);
     }
 
-    public Animator(Texture texture, int columns, int rows, float secondsPerFrame, Vector2 scale, Animation.PlayMode playMode, boolean shouldDispose) {
+    public Animator(Texture texture, int columns, int rows, float secondsPerFrame, Vector2 scale, Animation.PlayMode playMode, boolean shouldDispose, TransformTree<GameObject> transform) {
         this.scale = scale;
+        this.transform = transform;
 
         setAnimation(texture, columns, rows, secondsPerFrame, playMode, shouldDispose);
     }
@@ -68,6 +72,11 @@ public class Animator implements Component {
     }
 
     @Override
+    public void registerDraws(LayeredDraw layeredDraw) {
+        layeredDraw.add(this);
+    }
+
+    @Override
     public void enable(boolean state) {
         enabled = state;
     }
@@ -78,13 +87,22 @@ public class Animator implements Component {
     }
 
     @Override
-    public void draw(SpriteBatch batch, TransformTree<GameObject> transform) {
+    public void draw(SpriteBatch batch) {
         if (enabled && animation != null) {
             Vector2 position = transform.getWorldPosition();
             float rotation = transform.getWorldRotation();
             TextureRegion frame = animation.getKeyFrame(time);
             batch.draw(frame, position.x, position.y, 0, 0, frame.getRegionWidth(), frame.getRegionHeight(), scale.x, scale.y, rotation);
         }
+    }
+
+    @Override
+    public int getZ() {
+        return z;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
     }
 
     @Override

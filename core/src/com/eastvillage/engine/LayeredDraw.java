@@ -13,7 +13,11 @@ public class LayeredDraw extends TreeSet<ZDrawable> {
      * {@code getZ()} method where a low z value will be drawn first. When all ZDrawables have been added to the
      * LayeredDraw, call {@code draw()}. Remeber to clear the layered draw if reused. */
     public LayeredDraw() {
-        super((a, b) -> (a == b) ? 0 : a.getZ() - b.getZ());
+        super((a, b) -> {
+            if (a == b) return 0;
+            int diff = a.getZ() - b.getZ();
+            return  (diff >= 0) ? 1 : -1;
+        });
     }
 
     /** Draws all elements. */

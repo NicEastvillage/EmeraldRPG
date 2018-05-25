@@ -5,35 +5,38 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.utility.math.Vector2;
 
-public final class TexRenderer implements Component {
+public final class TexRenderer implements Component, ZDrawable {
 
     private boolean enabled = true;
 
+    private TransformTree<GameObject> transform;
     private Vector2 scale = Vector2.ONE;
     private TextureRegion texReg;
     private boolean shouldDispose;
+    private int z = 0;
 
-    public TexRenderer(Texture texture, boolean shouldDispose) {
-        this(new TextureRegion(texture), shouldDispose);
+    public TexRenderer(TransformTree<GameObject> transform, Texture texture, boolean shouldDispose) {
+        this(transform, new TextureRegion(texture), shouldDispose);
     }
 
-    public TexRenderer(TextureRegion texReg, boolean shouldDispose) {
-        this(texReg, Vector2.ONE, shouldDispose);
+    public TexRenderer(TransformTree<GameObject> transform, TextureRegion texReg, boolean shouldDispose) {
+        this(transform, texReg, Vector2.ONE, shouldDispose);
     }
 
-    public TexRenderer(Texture texture, float scaleX, float scaleY, boolean shouldDispose) {
-        this(new TextureRegion(texture), scaleX, scaleY, shouldDispose);
+    public TexRenderer(TransformTree<GameObject> transform, Texture texture, float scaleX, float scaleY, boolean shouldDispose) {
+        this(transform, new TextureRegion(texture), scaleX, scaleY, shouldDispose);
     }
 
-    public TexRenderer(TextureRegion texReg, float scaleX, float scaleY, boolean shouldDispose) {
-        this(texReg, new Vector2(scaleX, scaleY), shouldDispose);
+    public TexRenderer(TransformTree<GameObject> transform, TextureRegion texReg, float scaleX, float scaleY, boolean shouldDispose) {
+        this(transform, texReg, new Vector2(scaleX, scaleY), shouldDispose);
     }
 
-    public TexRenderer(Texture texture, Vector2 scale, boolean shouldDispose) {
-        this(new TextureRegion(texture), scale, shouldDispose);
+    public TexRenderer(TransformTree<GameObject> transform, Texture texture, Vector2 scale, boolean shouldDispose) {
+        this(transform, new TextureRegion(texture), scale, shouldDispose);
     }
 
-    public TexRenderer(TextureRegion texReg, Vector2 scale, boolean shouldDispose) {
+    public TexRenderer(TransformTree<GameObject> transform, TextureRegion texReg, Vector2 scale, boolean shouldDispose) {
+        this.transform = transform;
         this.scale = scale;
         this.texReg = new TextureRegion(texReg);
         this.shouldDispose = shouldDispose;
@@ -45,7 +48,12 @@ public final class TexRenderer implements Component {
     }
 
     @Override
-    public void draw(SpriteBatch batch, TransformTree<GameObject> transform) {
+    public void registerDraws(LayeredDraw layeredDraw) {
+        layeredDraw.add(this);
+    }
+
+    @Override
+    public void draw(SpriteBatch batch) {
         if (texReg != null) {
             Vector2 position = transform.getWorldPosition();
             float rotation = transform.getWorldRotation();
@@ -55,6 +63,15 @@ public final class TexRenderer implements Component {
             float originY = sprHeight * 0.5f;
             batch.draw(texReg, position.x - originX, position.y - originY, originX, originY, sprWidth, sprHeight, scale.x, scale.y, (float)Math.toDegrees(rotation));
         }
+    }
+
+    @Override
+    public int getZ() {
+        return z;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
     }
 
     @Override

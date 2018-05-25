@@ -1,6 +1,5 @@
 package com.eastvillage.engine;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.eastvillage.utility.math.Vector2;
 
 import java.util.ArrayList;
@@ -75,15 +74,15 @@ public class GameObject {
         }
     }
 
-    public final void draw(SpriteBatch batch) {
+    public final void registerDraws(LayeredDraw layeredDraw) {
         for (Component component : components) {
             if (component.isEnabled()) {
-                component.draw(batch, transform);
+                component.registerDraws(layeredDraw);
             }
         }
         for (TransformTree<GameObject> child : transform.getChildren()) {
             if (child.target.isEnabled()) {
-                child.target.draw(batch);
+                child.target.registerDraws(layeredDraw);
             }
         }
     }
