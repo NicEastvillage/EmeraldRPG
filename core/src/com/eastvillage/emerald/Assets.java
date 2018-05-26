@@ -2,11 +2,14 @@ package com.eastvillage.emerald;
 
 public class Assets {
 
-    public static final String KNIGHT = "knight.png";
-    public static final String RANGER = "ranger.png";
-    public static final String PRIEST = "priest.png";
+    public static final String KNIGHT = "units/knight.png";
+    public static final String RANGER = "units/ranger.png";
+    public static final String PRIEST = "units/priest.png";
 
-    public static final String GRASS = "grass.png";
-    public static final String INDICATOR_MOVE = "valid move indicator.png";
-    public static final String INDICATOR_ATTACK = "valid attack indicator.png";
+    public static final String GRASS = "battlefield/grass.png";
+
+    public static final String HOVER_SHADOW = "battlefield/hover shadow.png";
+    public static final String HIGHLIGHT_MOVE = "battlefield/valid move highlight.png";
+    public static final String HIGHLIGHT_ATTACK = "battlefield/valid attack highlight.png";
+    public static final String HIGHLIGHT_CURRENT_UNIT = "battlefield/current unit highlight.png";
 }
