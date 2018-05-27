@@ -22,6 +22,11 @@ public class TurnController {
         current = new Turn(queue.getFirst(), this);
     }
 
+    /** Starts the first turn by switching its state to IDLE. */
+    public void start() {
+        current.changeState(TurnState.IDLE);
+    }
+
     public Turn current()  {
         return current;
     }
@@ -35,12 +40,13 @@ public class TurnController {
      * This method does not check the turn state.
      * @return the now current unit. */
     public void cycleQueue() {
-        BattleUnit cur = queue.pollFirst();
-        queue.addLast(cur);
+        BattleUnit curUnit = queue.pollFirst();
+        queue.addLast(curUnit);
 
         current = new Turn(queue.getFirst(), this);
 
         updateQueueCycleListeners();
+        current.changeState(TurnState.IDLE);
     }
 
     /** Adds a unit to the turn queue. The unit will be the last in the queue. */

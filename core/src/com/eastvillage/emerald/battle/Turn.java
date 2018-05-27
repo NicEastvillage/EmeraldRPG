@@ -16,8 +16,9 @@ public class Turn {
     public Turn(BattleUnit unit, TurnController controller) {
         this.unit = unit;
         this.controller = controller;
-        state = TurnState.IDLE;
+        state = TurnState.BEGINNING;
         hasMoved = false;
+        turnStateListeners = new LinkedList<>();
     }
 
     /** Call to indicate, that the unit has moved. */
@@ -38,6 +39,8 @@ public class Turn {
     /** Returns true if current state is allowed to change to the other state. */
     private boolean allowStateChange(TurnState other) {
         switch (state) {
+            case BEGINNING:
+                return other == TurnState.IDLE;
             case IDLE:
                 return other == TurnState.SELECTING_SPECIAL
                     || other == TurnState.ENDED;

@@ -7,7 +7,7 @@ import com.eastvillage.emerald.battle.battlefield.*;
 import java.util.HashSet;
 import java.util.function.Function;
 
-public class BattleController implements BattlefieldInputListener, TurnQueueListener {
+public class BattleController implements BattlefieldInputListener, TurnQueueListener, TurnStateListener {
 
     private Battlefield battlefield;
     private TurnController turnController;
@@ -21,6 +21,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
         turnController = new TurnController(battlefield.getAllUnits());
         turnController.addQueueListener(this);
+        turnController.current().addStateListener(this);
 
         inputProcessor = new BattlefieldInputProcessor(battlefield, camera);
         inputProcessor.addListener(this);
@@ -28,24 +29,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
         highlightController = new HighlightController(battlefield);
 
-        turnBegin(turnController.current().getUnit());
-    }
-
-    /** Highlight the tiles that are valid moves for the given unit. The previously highlighted tiles will be un-highlighted. */
-    private void turnBegin(BattleUnit unit) {
-        highlightController.clearValidMoves();
-
-        Hex start = battlefield.getPositionOf(unit);
-        int movement = unit.getUnit().getMovementSpeed();
-        Function<Hex, Boolean> impassable = hex -> !battlefield.isWithin(hex) || battlefield.isOccupied(hex);
-        HexPather pather = new HexPather(start, movement, impassable);
-
-        pather.dijkstra();
-        reachableHexes = pather.getAllReachableHexes();
-        reachableHexes.remove(start);
-
-        highlightController.setValidMoves(reachableHexes);
-        highlightController.setCurrentUnit(start);
+        turnController.start();
     }
 
     @Override
@@ -70,11 +54,49 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
     @Override
     public void onQueueCycle(TurnController turnController) {
-        turnBegin(turnController.current().getUnit());
+        turnController.current().addStateListener(this);
     }
 
     @Override
     public void onQueueModified(TurnController turnController) {
+
+    }
+
+    @Override
+    public void onTurnStateAny(Turn turn) {
+
+    }
+
+    @Override
+    public void onTurnStateIdle(Turn turn) {
+        BattleUnit unit = turn.getUnit();
+        highlightController.clearValidMoves();
+
+        Hex start = battlefield.getPositionOf(unit);
+        int movement = unit.getUnit().getMovementSpeed();
+        Function<Hex, Boolean> impassable = hex -> !battlefield.isWithin(hex) || battlefield.isOccupied(hex);
+        HexPather pather = new HexPather(start, movement, impassable);
+
+        pather.dijkstra();
+        reachableHexes = pather.getAllReachableHexes();
+        reachableHexes.remove(start);
+
+        highlightController.setCurrentUnit(start);
+        highlightController.setValidMoves(reachableHexes);
+    }
+
+    @Override
+    public void onTurnStateSpecialSelecting(Turn turn) {
+
+    }
+
+    @Override
+    public void onTurnStateSpecialTargeting(Turn turn) {
+
+    }
+
+    @Override
+    public void onTurnStateEnd(Turn turn) {
 
     }
 
