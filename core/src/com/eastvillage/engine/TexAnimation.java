@@ -7,45 +7,42 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.utility.math.Vector2;
 
-public class Animator implements Component, ZDrawable {
+/** The TexAnimation component is used to draw sprite animation. It supports rotation, scaling, and layers. */
+public class TexAnimation implements Component, ZDrawable {
 
     private boolean enabled = true;
 
     private TransformTree<GameObject> transform;
     private Vector2 scale = Vector2.ONE;
-    private Texture texture;
-    private boolean shouldDispose;
+    private boolean paused = false;
 
     private int z = 0;
 
     private float time = 0;
     private Animation<TextureRegion> animation;
 
-    public Animator(Texture texture, int columns, int rows, float secondsPerFrame, Animation.PlayMode playMode, boolean shouldDispose, TransformTree<GameObject> transform) {
-        this(texture, columns, rows, secondsPerFrame, new Vector2(1, 1), playMode, shouldDispose, transform);
+    public TexAnimation(TransformTree<GameObject> transform, Animation<TextureRegion> animation) {
+        transform = transform;
+        this.animation = animation;
     }
 
-    public Animator(Texture texture, int columns, int rows, float secondsPerFrame, float scaleX, float scaleY, Animation.PlayMode playMode, boolean shouldDispose, TransformTree<GameObject> transform) {
-        this(texture, columns, rows, secondsPerFrame, new Vector2(scaleX, scaleY), playMode, shouldDispose, transform);
+    public TexAnimation(TransformTree<GameObject> transform, Texture texture, int columns, int rows, float secondsPerFrame, Animation.PlayMode playMode) {
+        this(transform, texture, columns, rows, secondsPerFrame, new Vector2(1, 1), playMode);
     }
 
-    public Animator(Texture texture, int columns, int rows, float secondsPerFrame, Vector2 scale, Animation.PlayMode playMode, boolean shouldDispose, TransformTree<GameObject> transform) {
+    public TexAnimation(TransformTree<GameObject> transform, Texture texture, int columns, int rows, float secondsPerFrame, float scaleX, float scaleY, Animation.PlayMode playMode) {
+        this(transform, texture, columns, rows, secondsPerFrame, new Vector2(scaleX, scaleY), playMode);
+    }
+
+    public TexAnimation(TransformTree<GameObject> transform, Texture texture, int columns, int rows, float secondsPerFrame, Vector2 scale, Animation.PlayMode playMode) {
         this.scale = scale;
         this.transform = transform;
 
-        setAnimation(texture, columns, rows, secondsPerFrame, playMode, shouldDispose);
+        setAnimation(texture, columns, rows, secondsPerFrame, playMode);
     }
 
-    public void setAnimation(Texture texture, int columns, int rows, float secondsPerFrame, Animation.PlayMode playMode, boolean shouldDispose) {
-        if (this.shouldDispose) {
-            this.texture.dispose();
-        }
-
-        this.texture = texture;
-        this.shouldDispose = shouldDispose;
-
+    public void setAnimation(Texture texture, int columns, int rows, float secondsPerFrame, Animation.PlayMode playMode) {
         TextureRegion[][] tmp = TextureRegion.split(texture, texture.getWidth() / columns, texture.getHeight() / rows);
-
         TextureRegion[] frames = new TextureRegion[columns * rows];
         int index = 0;
         for (int i = 0; i < rows; i++) {
@@ -58,6 +55,12 @@ public class Animator implements Component, ZDrawable {
         animation.setPlayMode(playMode);
     }
 
+    /** Set animation to an already created animation. If you wan't the new animation to start from first
+     * frame call {@code resetTime()}. */
+    public void setAnimation(Animation<TextureRegion> animation) {
+        this.animation = animation;
+    }
+
     public void setPlayMode(Animation.PlayMode playMode) {
         animation.setPlayMode(playMode);
     }
@@ -66,9 +69,19 @@ public class Animator implements Component, ZDrawable {
         return animation;
     }
 
+    /** Reset the internal timer. This will make the animation start over. */
+    public void resetTime() {
+        time = 0;
+    }
+
+    /** Pause or unpause the animation. The animation will still be drawn, but it won't change frame. */
+    public void pause(boolean state) {
+        paused = state;
+    }
+
     @Override
     public void update(TransformTree<GameObject> transform) {
-        time += Gdx.graphics.getDeltaTime();
+        if (enabled && !paused) time += Gdx.graphics.getDeltaTime();
     }
 
     @Override
@@ -101,14 +114,13 @@ public class Animator implements Component, ZDrawable {
         return z;
     }
 
+    /** Set the z value of this texture. Textures with high z value will be drawn on top of textures with low z value. */
     public void setZ(int z) {
         this.z = z;
     }
 
     @Override
     public void dispose() {
-        if (shouldDispose) {
-            texture.dispose();
-        }
+
     }
 }
