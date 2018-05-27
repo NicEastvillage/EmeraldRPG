@@ -20,8 +20,7 @@ public class Tile extends GameObject {
     public final Hex hex;
 
     private TexRenderer baseTexRenderer;
-    private TexRenderer indicatorTexRenderer;
-    private TextureRegion indicatorValidMove, indicatorValidAttack;
+    private TexRenderer highlightRenderer;
 
     public Tile(Hex hex, TransformTree<GameObject> parent) {
         this.hex = hex;
@@ -29,26 +28,17 @@ public class Tile extends GameObject {
         transform.setWorldPosition(new Vector2(hex.x * SPACING_WIDTH + hex.y * SPACING_WIDTH / 2, hex.y * SPACING_HEIGHT));
 
         TextureRegion baseTexture = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.GRASS));
-        baseTexRenderer = new TexRenderer(transform, baseTexture, false);
+        baseTexRenderer = new TexRenderer(transform, baseTexture);
         addComponent(baseTexRenderer);
 
-        indicatorValidMove = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.HIGHLIGHT_MOVE));
-        indicatorValidAttack = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.HIGHLIGHT_ATTACK));
-        indicatorTexRenderer = new TexRenderer(transform, indicatorValidMove, false);
-        indicatorTexRenderer.enable(false);
-        addComponent(indicatorTexRenderer);
+        highlightRenderer = new TexRenderer(transform, (Texture) null);
+        highlightRenderer.enable(false);
+        addComponent(highlightRenderer);
     }
 
-    /** Toggle which indicator is shown. Only one indicator can be shown at once. */
-    public void showIndicators(boolean move, boolean attack) {
-        if (move && attack) throw new IllegalArgumentException("Only one indicator can be shown at once.");
-
-        if (move) {
-            indicatorTexRenderer.setTex(indicatorValidMove, false);
-        } else if (attack) {
-            indicatorTexRenderer.setTex(indicatorValidAttack, false);
-        }
-
-        indicatorTexRenderer.enable(move || attack);
+    /** Set which highlight is displayed. Only one indicator can be shown at once. */
+    public void showHighlight(TextureRegion highlight) {
+        highlightRenderer.setTex(highlight);
+        highlightRenderer.enable(highlight != null);
     }
 }

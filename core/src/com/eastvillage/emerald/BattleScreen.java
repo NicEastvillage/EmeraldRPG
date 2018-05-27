@@ -37,6 +37,8 @@ public class BattleScreen implements Screen {
         manager.load(Assets.GRASS, Texture.class);
         manager.load(Assets.HIGHLIGHT_MOVE, Texture.class);
         manager.load(Assets.HIGHLIGHT_ATTACK, Texture.class);
+        manager.load(Assets.HIGHLIGHT_CURRENT_UNIT, Texture.class);
+        manager.load(Assets.HOVER_SHADOW, Texture.class);
 
         manager.load(Assets.KNIGHT, Texture.class);
         manager.load(Assets.RANGER, Texture.class);

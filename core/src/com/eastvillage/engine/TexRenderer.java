@@ -17,7 +17,7 @@ public final class TexRenderer implements Component, ZDrawable {
 
     /** The TexRenderer component is used to draw textures or texture regions. It supports rotation, scaling and layers. */
     public TexRenderer(TransformTree<GameObject> transform, Texture texture) {
-        this(transform, new TextureRegion(texture));
+        this(transform, texture == null ? null : new TextureRegion(texture));
     }
 
     /** The TexRenderer component is used to draw textures or texture regions. It supports rotation, scaling and layers. */
@@ -27,7 +27,7 @@ public final class TexRenderer implements Component, ZDrawable {
 
     /** The TexRenderer component is used to draw textures or texture regions. It supports rotation, scaling and layers. */
     public TexRenderer(TransformTree<GameObject> transform, Texture texture, float scaleX, float scaleY) {
-        this(transform, new TextureRegion(texture), scaleX, scaleY);
+        this(transform, texture == null ? null : new TextureRegion(texture), scaleX, scaleY);
     }
 
     /** The TexRenderer component is used to draw textures or texture regions. It supports rotation, scaling and layers. */

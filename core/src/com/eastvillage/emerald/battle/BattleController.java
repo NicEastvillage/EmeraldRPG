@@ -3,8 +3,6 @@ package com.eastvillage.emerald.battle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.eastvillage.emerald.battle.battlefield.*;
-import com.eastvillage.utility.math.Vector2;
-import javafx.scene.input.MouseButton;
 
 import java.util.HashSet;
 import java.util.function.Function;
@@ -14,6 +12,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     private Battlefield battlefield;
     private TurnController turnController;
     private BattlefieldInputProcessor inputProcessor;
+    private HighlightController highlightController;
 
     private HashSet<Hex> reachableHexes;
 
@@ -27,12 +26,14 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
         inputProcessor.addListener(this);
         Gdx.input.setInputProcessor(inputProcessor);
 
-        highlightValidMoves(turnController.current().getUnit());
+        highlightController = new HighlightController(battlefield);
+
+        turnBegin(turnController.current().getUnit());
     }
 
-    /** Highlight the tiles that are valid moves for the given unit. The previously highlighted tiles will un-highlighted. */
-    private void highlightValidMoves(BattleUnit unit) {
-        hideValidMoves();
+    /** Highlight the tiles that are valid moves for the given unit. The previously highlighted tiles will be un-highlighted. */
+    private void turnBegin(BattleUnit unit) {
+        highlightController.clearValidMoves();
 
         Hex start = battlefield.getPositionOf(unit);
         int movement = unit.getUnit().getMovementSpeed();
@@ -43,17 +44,8 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
         reachableHexes = pather.getAllReachableHexes();
         reachableHexes.remove(start);
 
-        for (Hex hex : reachableHexes) {
-            battlefield.getTile(hex).showIndicators(true, false);
-        }
-    }
-
-    /** Remove the highlight from reachable tiles. */
-    private void hideValidMoves() {
-        if (reachableHexes == null) return;
-        for (Hex hex : reachableHexes) {
-            battlefield.getTile(hex).showIndicators(false, false);
-        }
+        highlightController.setValidMoves(reachableHexes);
+        highlightController.setCurrentUnit(start);
     }
 
     @Override
@@ -78,7 +70,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
     @Override
     public void onQueueCycle(TurnController turnController) {
-        highlightValidMoves(turnController.current().getUnit());
+        turnBegin(turnController.current().getUnit());
     }
 
     @Override
