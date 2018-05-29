@@ -25,7 +25,6 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
         inputProcessor = new BattlefieldInputProcessor(battlefield, camera);
         inputProcessor.addListener(this);
-        Gdx.input.setInputProcessor(inputProcessor);
 
         highlightController = new HighlightController(battlefield);
 

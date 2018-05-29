@@ -1,6 +1,7 @@
 package com.eastvillage.emerald;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -36,8 +37,12 @@ public class BattleScreen implements Screen {
         root = new GameObject();
         Battlefield battlefield = new Battlefield(root.transform);
         controller = new BattleController(battlefield, camera);
-
         stage = new BattleStage(controller);
+
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(controller.getInputProcessor());
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     public static void loadAssets(AssetManager manager) {
