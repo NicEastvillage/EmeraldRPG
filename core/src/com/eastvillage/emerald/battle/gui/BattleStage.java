@@ -11,6 +11,7 @@ public class BattleStage extends Stage {
 
     private BattleController controller;
     private Table root;
+    private TextButton endTurnButton;
 
     public BattleStage(BattleController controller) {
         super();
@@ -20,10 +21,12 @@ public class BattleStage extends Stage {
         skin.load(Gdx.files.internal(Assets.GUI_STYLE));
         root = new Table(skin);
         root.setFillParent(true);
-        root.setDebug(true);
+        //root.setDebug(true);
         addActor(root);
 
-        root.add(new TextButton("End Turn", skin, "emerald"));
+        endTurnButton = new TextButton("End Turn", skin, "emerald");
+        endTurnButton.setSize(150, 70);
+        root.add(endTurnButton).padTop(20).size(150, 70);
         root.top();
     }
 }

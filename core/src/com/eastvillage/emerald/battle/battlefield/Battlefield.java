@@ -16,8 +16,8 @@ import java.util.Set;
 /** A battlefield is a game object and responsible for displaying and positioning the tiles and units of the battle. */
 public class Battlefield extends GameObject {
 
-    public static final int TILE_VERT = 13;
-    public static final int TILE_HOR = 18;
+    public static final int TILE_VERT = 9;
+    public static final int TILE_HOR = 12;
 
     private HashMap<Hex, Tile> map = new HashMap<>();
     private BiMap<BattleUnit, Hex> unitMap = new BiMap<>();
