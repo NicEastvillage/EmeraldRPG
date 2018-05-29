@@ -2,6 +2,9 @@ package com.eastvillage.emerald;
 
 public class Assets {
 
+    public static final String GUI_ATLAS = "gui/uiskin.atlas";
+    public static final String GUI_STYLE = "gui/uiskin.json";
+
     public static final String KNIGHT = "units/knight.png";
     public static final String RANGER = "units/ranger.png";
     public static final String PRIEST = "units/priest.png";

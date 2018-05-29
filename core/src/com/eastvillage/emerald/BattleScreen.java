@@ -7,9 +7,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.eastvillage.emerald.battle.BattleController;
 import com.eastvillage.emerald.battle.battlefield.Battlefield;
 import com.eastvillage.emerald.battle.battlefield.Tile;
+import com.eastvillage.emerald.battle.gui.BattleStage;
 import com.eastvillage.engine.GameObject;
 import com.eastvillage.engine.LayeredDraw;
 
@@ -18,6 +21,8 @@ public class BattleScreen implements Screen {
     private EmeraldGame game;
     private OrthographicCamera camera;
     private GameObject root;
+    private BattleController controller;
+    private BattleStage stage;
     private LayeredDraw layeredDraw = new LayeredDraw();
 
     public BattleScreen(EmeraldGame game) {
@@ -30,10 +35,14 @@ public class BattleScreen implements Screen {
 
         root = new GameObject();
         Battlefield battlefield = new Battlefield(root.transform);
-        new BattleController(battlefield, camera);
+        controller = new BattleController(battlefield, camera);
+
+        stage = new BattleStage(controller);
     }
 
     public static void loadAssets(AssetManager manager) {
+        manager.load(Assets.GUI_ATLAS, TextureAtlas.class);
+
         manager.load(Assets.GRASS, Texture.class);
         manager.load(Assets.HIGHLIGHT_MOVE, Texture.class);
         manager.load(Assets.HIGHLIGHT_ATTACK, Texture.class);
@@ -67,6 +76,8 @@ public class BattleScreen implements Screen {
         layeredDraw.draw(batch);
 
         batch.end();
+        stage.act();
+        stage.draw();
         layeredDraw.clear();
     }
 
@@ -93,6 +104,7 @@ public class BattleScreen implements Screen {
     @Override
     public void dispose() {
         root.dispose();
+        stage.dispose();
         game.getAssetManager().clear();
     }
 }
