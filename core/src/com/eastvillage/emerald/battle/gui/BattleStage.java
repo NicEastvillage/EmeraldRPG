@@ -23,7 +23,7 @@ public class BattleStage extends Stage {
         root.setDebug(true);
         addActor(root);
 
-        root.add(new TextButton("Hello World", skin, "default"));
+        root.add(new TextButton("Hello World", skin, "emerald"));
 
     }
 }
