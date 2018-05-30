@@ -7,7 +7,7 @@ import com.eastvillage.emerald.battle.battlefield.*;
 import java.util.HashSet;
 import java.util.function.Function;
 
-public class BattleController implements BattlefieldInputListener, TurnQueueListener, TurnStateListener {
+public class BattleController implements BattlefieldInputListener, TurnQueueListener, TurnStateListener, TurnEndListener {
 
     private Battlefield battlefield;
     private TurnController turnController;
@@ -21,7 +21,9 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
         turnController = new TurnController(battlefield.getAllUnits());
         turnController.addQueueListener(this);
-        turnController.current().addStateListener(this);
+        turnController.current().addStateListener(this); // first turn must be added directly
+        turnController.addTurnStateListener(this);
+        turnController.setTurnEndListener(this);
 
         inputProcessor = new BattlefieldInputProcessor(battlefield, camera);
         inputProcessor.addListener(this);
@@ -53,7 +55,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
     @Override
     public void onQueueCycle(TurnController turnController) {
-        turnController.current().addStateListener(this);
+
     }
 
     @Override
@@ -99,6 +101,15 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
     }
 
+    @Override
+    public void onTurnEnd() {
+        turnController.cycleQueue();
+    }
+
+    public void onEndTurnButtonPressed() {
+        turnController.current().changeState(TurnState.ENDED);
+    }
+
     public Battlefield getBattlefield() {
         return battlefield;
     }
@@ -110,4 +121,5 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     public BattlefieldInputProcessor getInputProcessor() {
         return inputProcessor;
     }
+
 }

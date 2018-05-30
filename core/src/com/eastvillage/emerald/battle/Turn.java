@@ -3,6 +3,7 @@ package com.eastvillage.emerald.battle;
 import com.eastvillage.emerald.battle.battlefield.BattleUnit;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /** The Turn class describes the state of current turn and variables relevant to it. */
 public class Turn {
@@ -13,12 +14,16 @@ public class Turn {
     private TurnState state;
     private LinkedList<TurnStateListener> turnStateListeners;
 
-    public Turn(BattleUnit unit, TurnController controller) {
+    public Turn(BattleUnit unit, TurnController controller, List<TurnStateListener> stateListeners) {
         this.unit = unit;
         this.controller = controller;
         state = TurnState.BEGINNING;
         hasMoved = false;
         turnStateListeners = new LinkedList<>();
+
+        for (TurnStateListener listener : stateListeners) {
+            addStateListener(listener);
+        }
     }
 
     /** Call to indicate, that the unit has moved. */
@@ -31,6 +36,9 @@ public class Turn {
         if (allowStateChange(state)) {
             this.state = state;
             updateStateListerners();
+            if (state == TurnState.ENDED) {
+                controller.onTurnEnd();
+            }
         } else {
             throw new IllegalStateChangeException("The TurnState:" + this.state + " can not go to TurnState:" + state);
         }
@@ -54,6 +62,7 @@ public class Turn {
                     || other == TurnState.ENDED;
 
             case ENDED:
+                return other == TurnState.ENDED;
             default:
                 return false;
         }

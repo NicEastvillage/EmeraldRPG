@@ -6,10 +6,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class TurnController {
+public class TurnController implements TurnEndListener {
 
     private LinkedList<BattleUnit> queue;
     private LinkedList<TurnQueueListener> queueListeners;
+    private LinkedList<TurnStateListener> turnStateListeners;
+    private TurnEndListener turnEndListener;
 
     private Turn current;
 
@@ -18,8 +20,15 @@ public class TurnController {
         Collections.shuffle(queue);
 
         queueListeners = new LinkedList<>();
+        turnStateListeners = new LinkedList<>();
 
-        current = new Turn(queue.getFirst(), this);
+        current = new Turn(queue.getFirst(), this, turnStateListeners);
+    }
+
+    /** The TurnEndListener will be the final call when a turn is ended. This will typically be a controller that
+     * checks if the TurnController should cycle. */
+    public void setTurnEndListener(TurnEndListener listener) {
+        turnEndListener = listener;
     }
 
     /** Starts the first turn by switching its state to IDLE. */
@@ -43,7 +52,7 @@ public class TurnController {
         BattleUnit curUnit = queue.pollFirst();
         queue.addLast(curUnit);
 
-        current = new Turn(queue.getFirst(), this);
+        current = new Turn(queue.getFirst(), this, turnStateListeners);
 
         updateQueueCycleListeners();
         current.changeState(TurnState.IDLE);
@@ -88,8 +97,26 @@ public class TurnController {
         }
     }
 
+    /** Add a TurnStateListener that will be trigger when the turn state changes in any turn. If the listener should
+     * only listen to the current turn, add it directly to the current turn instead. */
+    public void addTurnStateListener(TurnStateListener listener) {
+        turnStateListeners.add(listener);
+    }
+
+    /** Remove a TurnStateListener. The listener will still receive calls from the current turn, unless it removed
+     * from that turn as well. */
+    public boolean removeTurnStateListener(TurnStateListener listener) {
+        return turnStateListeners.remove(listener);
+    }
+
     /** Returns a copy of the turn queue. Changes to that list does not affect the turn controller. */
     public LinkedList<BattleUnit> getQueueCopy() {
         return new LinkedList<>(queue);
+    }
+
+    @Override
+    public void onTurnEnd() {
+        if (turnEndListener != null)
+            turnEndListener.onTurnEnd();
     }
 }
