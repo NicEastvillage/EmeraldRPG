@@ -19,8 +19,9 @@ import com.eastvillage.engine.LayeredDraw;
 
 public class BattleScreen implements Screen {
 
-    private EmeraldGame game;
     private OrthographicCamera camera;
+    private Skin skin;
+    private EmeraldGame game;
     private GameObject root;
     private BattleController controller;
     private BattleStage stage;
@@ -28,6 +29,10 @@ public class BattleScreen implements Screen {
 
     public BattleScreen(EmeraldGame game) {
         this.game = game;
+
+        skin = new Skin();
+        skin.addRegions(EmeraldGame.getAsset(Assets.GUI_ATLAS));
+        skin.load(Gdx.files.internal(Assets.GUI_STYLE));
 
         camera = new OrthographicCamera(GameInfo.SCREEN_WIDTH, GameInfo.SCREEN_HEIGHT);
         camera.zoom = GameInfo.ZOOM;
@@ -37,7 +42,7 @@ public class BattleScreen implements Screen {
         root = new GameObject();
         Battlefield battlefield = new Battlefield(root.transform);
         controller = new BattleController(battlefield, camera);
-        stage = new BattleStage(controller);
+        stage = new BattleStage(controller, skin);
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);

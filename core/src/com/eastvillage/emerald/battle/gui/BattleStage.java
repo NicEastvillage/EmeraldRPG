@@ -13,20 +13,18 @@ public class BattleStage extends Stage {
     private Table root;
     private TextButton endTurnButton;
 
-    public BattleStage(BattleController controller) {
+    public BattleStage(BattleController controller, Skin skin) {
         super();
 
-        Skin skin = new Skin();
-        skin.addRegions(EmeraldGame.getAsset(Assets.GUI_ATLAS));
-        skin.load(Gdx.files.internal(Assets.GUI_STYLE));
+        this.controller = controller;
+
         root = new Table(skin);
         root.setFillParent(true);
         //root.setDebug(true);
         addActor(root);
 
         endTurnButton = new TextButton("End Turn", skin, "emerald");
-        endTurnButton.setSize(150, 70);
-        root.add(endTurnButton).padTop(20).size(150, 70);
+        root.add(endTurnButton).padTop(20).size(150, 70).fill();
         root.top();
     }
 }
