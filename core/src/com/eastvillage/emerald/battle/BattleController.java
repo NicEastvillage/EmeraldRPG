@@ -14,7 +14,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     private BattlefieldInputProcessor inputProcessor;
     private HighlightController highlightController;
 
-    private HashSet<Hex> reachableHexes;
+    private HashSet<Hex> reachableHexes = new HashSet<>();
 
     public BattleController(Battlefield battlefield, OrthographicCamera camera) {
         this.battlefield = battlefield;
@@ -48,7 +48,8 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
         if (button == 0) {
             if (reachableHexes.contains(tile.hex)) {
                 new UnitMover(battlefield.transform, turnController.current().getUnit(), battlefield, tile);
-                turnController.cycleQueue();
+                turnController.current().markHasMoved();
+                turnController.current().changeState(TurnState.IDLE);
             }
         }
     }
@@ -73,17 +74,21 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
         BattleUnit unit = turn.getUnit();
         highlightController.clearValidMoves();
 
-        Hex start = battlefield.getPositionOf(unit);
-        int movement = unit.getUnit().getMovementSpeed();
-        Function<Hex, Boolean> impassable = hex -> !battlefield.isWithin(hex) || battlefield.isOccupied(hex);
-        HexPather pather = new HexPather(start, movement, impassable);
+        Hex pos = battlefield.getPositionOf(unit);
+        highlightController.setCurrentUnit(pos);
 
-        pather.dijkstra();
-        reachableHexes = pather.getAllReachableHexes();
-        reachableHexes.remove(start);
+        if (!turn.hasMoved()) {
 
-        highlightController.setCurrentUnit(start);
-        highlightController.setValidMoves(reachableHexes);
+            int movement = unit.getUnit().getMovementSpeed();
+            Function<Hex, Boolean> impassable = hex -> !battlefield.isWithin(hex) || battlefield.isOccupied(hex);
+            HexPather pather = new HexPather(pos, movement, impassable);
+
+            pather.dijkstra();
+            reachableHexes = pather.getAllReachableHexes();
+            reachableHexes.remove(pos);
+
+            highlightController.setValidMoves(reachableHexes);
+        }
     }
 
     @Override

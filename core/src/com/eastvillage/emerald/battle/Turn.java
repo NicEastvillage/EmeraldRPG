@@ -50,7 +50,8 @@ public class Turn {
             case BEGINNING:
                 return other == TurnState.IDLE;
             case IDLE:
-                return other == TurnState.SELECTING_SPECIAL
+                return other == TurnState.IDLE
+                    || other == TurnState.SELECTING_SPECIAL
                     || other == TurnState.ENDED;
 
             case SELECTING_SPECIAL:
