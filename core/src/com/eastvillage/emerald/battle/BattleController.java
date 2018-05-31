@@ -5,6 +5,7 @@ import com.eastvillage.emerald.battle.battlefield.*;
 import com.eastvillage.emerald.battle.turn.*;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.function.Function;
 
 public class BattleController implements BattlefieldInputListener, TurnQueueListener, TurnStateListener, TurnEndListener {
@@ -17,6 +18,8 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
     private HashSet<Hex> possibleMoveHexes = new HashSet<>();
     private HashSet<BattleUnit> possibleAttacks = new HashSet<>();
+
+    private Random random = new Random();
 
     public BattleController(Battlefield battlefield, OrthographicCamera camera) {
         this.battlefield = battlefield;
@@ -50,12 +53,30 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     @Override
     public void onTileClicked(Tile tile, int button) {
         if (button == 0) {
+            BattleUnit unit = battlefield.getUnitAt(tile.hex);
             if (possibleMoveHexes.contains(tile.hex)) {
                 new UnitMover(battlefield.transform, turnController.current().getUnit(), battlefield, tile);
                 turnController.current().markHasMoved();
                 turnController.current().changeState(TurnState.IDLE);
+            } else if (unit != null && possibleAttacks.contains(unit)) {
+                attack(turnController.current().getUnit(), unit);
+                turnController.current().changeState(TurnState.ENDED);
             }
         }
+    }
+
+    /** Make one unit deal its attack damage to another unit. */
+    private void attack(BattleUnit attacker, BattleUnit target) {
+        int attack = attacker.getUnit().getAttack();
+        int defence = target.getUnit().getDefence();
+
+        // damage formula
+        int damage = attack + random.nextInt(attack);
+        int block = defence + random.nextInt(defence);
+        int total = Math.max(0, damage - block);
+
+        target.getUnit().takeDamage(total);
+        System.out.println(target.getUnit().getType() + " took " + total + " damage!");
     }
 
     @Override
