@@ -14,6 +14,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     private HighlightController highlightController;
 
     private HashSet<Hex> possibleMoveHexes = new HashSet<>();
+    private HashSet<BattleUnit> possibleAttacks = new HashSet<>();
 
     public BattleController(Battlefield battlefield, OrthographicCamera camera) {
         this.battlefield = battlefield;
@@ -93,6 +94,8 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
             possibleMoveHexes.remove(start);
 
             highlightController.setValidMoves(possibleMoveHexes);
+        } else {
+            possibleMoveHexes.clear();
         }
     }
 
