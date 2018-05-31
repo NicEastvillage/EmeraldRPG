@@ -25,4 +25,8 @@ public class BattleUnit extends GameObject {
     public Unit getUnit() {
         return unit;
     }
+
+    public Allegiance getAllegiance() {
+        return allegiance;
+    }
 }

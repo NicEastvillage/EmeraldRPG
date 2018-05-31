@@ -23,6 +23,11 @@ public class Ranger implements UnitType {
     }
 
     @Override
+    public int getRange(Unit unit) {
+        return 4;
+    }
+
+    @Override
     public int getMovementSpeed(Unit unit) {
         return 2;
     }

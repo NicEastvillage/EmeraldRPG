@@ -47,6 +47,10 @@ public class Unit {
         return type.getAttack(this);
     }
 
+    public int getRange() {
+        return type.getRange(this);
+    }
+
     public int getMovementSpeed() {
         return type.getMovementSpeed(this);
     }

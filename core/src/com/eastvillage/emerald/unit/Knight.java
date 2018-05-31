@@ -23,6 +23,11 @@ public class Knight implements UnitType {
     }
 
     @Override
+    public int getRange(Unit unit) {
+        return 1;
+    }
+
+    @Override
     public int getMovementSpeed(Unit unit) {
         return 3;
     }

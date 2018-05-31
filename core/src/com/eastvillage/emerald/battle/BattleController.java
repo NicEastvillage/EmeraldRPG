@@ -71,13 +71,16 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
     @Override
     public void onTurnStateIdle(Turn turn) {
-        BattleUnit unit = turn.getUnit();
         highlightController.clearValidMoves();
+        highlightController.clearValidAttacks();
+
+        BattleUnit unit = turn.getUnit();
 
         Hex pos = battlefield.getPositionOf(unit);
         highlightController.setCurrentUnit(pos);
 
         findPossibleMoves(turn, pos);
+        findPossibleAttacks(unit, pos);
     }
 
     /** Find possible move of possible in the this turn state. Possible moves will be stored in {@code possibleMoveHexes}
@@ -97,6 +100,27 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
         } else {
             possibleMoveHexes.clear();
         }
+    }
+
+    /** Find possible attacks in range of unit. Possible attacks will be stored in {@code possibleAttacks}
+     * and the tiles will be highlighted. */
+    private void findPossibleAttacks(BattleUnit unit, Hex pos) {
+        int range = Math.max(1, unit.getUnit().getRange());
+
+        possibleAttacks.clear();
+        HashSet<Hex> possibleAttackHexes = new HashSet<>();
+
+        for (BattleUnit other : battlefield.getAllUnits()) {
+            if (other != unit && other.getAllegiance() != unit.getAllegiance()) {
+                Hex otherPos = battlefield.getPositionOf(other);
+                if (pos.distManhattan(otherPos) <= range) {
+                    possibleAttacks.add(other);
+                    possibleAttackHexes.add(otherPos);
+                }
+            }
+        }
+
+        highlightController.setValidAttacks(possibleAttackHexes);
     }
 
     @Override
