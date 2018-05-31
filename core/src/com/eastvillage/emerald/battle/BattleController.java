@@ -1,6 +1,5 @@
 package com.eastvillage.emerald.battle;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.eastvillage.emerald.battle.battlefield.*;
 
@@ -14,7 +13,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     private BattlefieldInputProcessor inputProcessor;
     private HighlightController highlightController;
 
-    private HashSet<Hex> reachableHexes = new HashSet<>();
+    private HashSet<Hex> possibleMoveHexes = new HashSet<>();
 
     public BattleController(Battlefield battlefield, OrthographicCamera camera) {
         this.battlefield = battlefield;
@@ -46,7 +45,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     @Override
     public void onTileClicked(Tile tile, int button) {
         if (button == 0) {
-            if (reachableHexes.contains(tile.hex)) {
+            if (possibleMoveHexes.contains(tile.hex)) {
                 new UnitMover(battlefield.transform, turnController.current().getUnit(), battlefield, tile);
                 turnController.current().markHasMoved();
                 turnController.current().changeState(TurnState.IDLE);
@@ -77,17 +76,23 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
         Hex pos = battlefield.getPositionOf(unit);
         highlightController.setCurrentUnit(pos);
 
+        findPossibleMoves(turn, pos);
+    }
+
+    /** Find possible move of possible in the this turn state. Possible moves will be stored in {@code possibleMoveHexes}
+     * and the tiles will be highlighted. */
+    private void findPossibleMoves(Turn turn, Hex start) {
         if (!turn.hasMoved()) {
 
-            int movement = unit.getUnit().getMovementSpeed();
+            int movement = turn.getUnit().getUnit().getMovementSpeed();
             Function<Hex, Boolean> impassable = hex -> !battlefield.isWithin(hex) || battlefield.isOccupied(hex);
-            HexPather pather = new HexPather(pos, movement, impassable);
+            HexPather pather = new HexPather(start, movement, impassable);
 
             pather.dijkstra();
-            reachableHexes = pather.getAllReachableHexes();
-            reachableHexes.remove(pos);
+            possibleMoveHexes = pather.getAllReachableHexes();
+            possibleMoveHexes.remove(start);
 
-            highlightController.setValidMoves(reachableHexes);
+            highlightController.setValidMoves(possibleMoveHexes);
         }
     }
 
