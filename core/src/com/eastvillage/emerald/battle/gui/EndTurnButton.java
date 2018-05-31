@@ -2,8 +2,8 @@ package com.eastvillage.emerald.battle.gui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.eastvillage.emerald.battle.Turn;
-import com.eastvillage.emerald.battle.TurnStateListener;
+import com.eastvillage.emerald.battle.turn.Turn;
+import com.eastvillage.emerald.battle.turn.TurnStateListener;
 
 public class EndTurnButton extends TextButton implements TurnStateListener {
 

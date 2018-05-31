@@ -1,5 +1,6 @@
-package com.eastvillage.emerald.battle;
+package com.eastvillage.emerald.battle.turn;
 
+import com.eastvillage.emerald.battle.IllegalStateChangeException;
 import com.eastvillage.emerald.battle.battlefield.BattleUnit;
 
 import java.util.LinkedList;

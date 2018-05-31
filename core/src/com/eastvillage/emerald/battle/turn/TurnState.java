@@ -1,4 +1,4 @@
-package com.eastvillage.emerald.battle;
+package com.eastvillage.emerald.battle.turn;
 
 public enum TurnState {
     BEGINNING,
