@@ -21,7 +21,6 @@ public class HighlightController {
     private Hex currentUnit;
     private ArrayList<Hex> validMoves;
     private ArrayList<Hex> validAttacks;
-    private HashSet<Hex> clickables;
 
     public HighlightController(Battlefield battlefield) {
         this.battlefield = battlefield;
@@ -33,7 +32,6 @@ public class HighlightController {
         highlights = new HashMap<>();
         validMoves = new ArrayList<>();
         validAttacks = new ArrayList<>();
-        clickables = new HashSet<>();
     }
 
     /** Clears all highlighting. */
