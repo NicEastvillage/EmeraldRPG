@@ -12,6 +12,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     private TurnController turnController;
     private BattlefieldInputProcessor inputProcessor;
     private HighlightController highlightController;
+    private ClickableTilesController clickableTiles;
 
     private HashSet<Hex> possibleMoveHexes = new HashSet<>();
     private HashSet<BattleUnit> possibleAttacks = new HashSet<>();
@@ -29,6 +30,8 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
         inputProcessor.addListener(this);
 
         highlightController = new HighlightController(battlefield);
+        clickableTiles = new ClickableTilesController(battlefield);
+        inputProcessor.addListener(clickableTiles);
 
         turnController.start();
     }
@@ -72,6 +75,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     @Override
     public void onTurnStateIdle(Turn turn) {
         highlightController.clearAll();
+        clickableTiles.clear();
 
         BattleUnit unit = turn.getUnit();
 
@@ -96,6 +100,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
             possibleMoveHexes.remove(start);
 
             highlightController.setValidMoves(possibleMoveHexes);
+            clickableTiles.addAll(possibleMoveHexes);
         } else {
             possibleMoveHexes.clear();
         }
@@ -120,6 +125,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
         }
 
         highlightController.setValidAttacks(possibleAttackHexes);
+        clickableTiles.addAll(possibleAttackHexes);
     }
 
     @Override
