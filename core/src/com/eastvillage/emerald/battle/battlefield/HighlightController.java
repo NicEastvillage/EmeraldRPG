@@ -36,6 +36,13 @@ public class HighlightController {
         clickables = new HashSet<>();
     }
 
+    /** Clears all highlighting. */
+    public void clearAll() {
+        clearCurrentUnit();
+        clearValidMoves();
+        clearValidAttacks();
+    }
+
     /** Set highlight of current unit. */
     public void setCurrentUnit(Hex hex) {
         clearCurrentUnit();

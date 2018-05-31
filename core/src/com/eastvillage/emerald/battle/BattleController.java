@@ -71,8 +71,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
     @Override
     public void onTurnStateIdle(Turn turn) {
-        highlightController.clearValidMoves();
-        highlightController.clearValidAttacks();
+        highlightController.clearAll();
 
         BattleUnit unit = turn.getUnit();
 
