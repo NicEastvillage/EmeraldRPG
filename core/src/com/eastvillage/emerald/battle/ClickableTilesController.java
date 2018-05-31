@@ -3,6 +3,7 @@ package com.eastvillage.emerald.battle;
 import com.badlogic.gdx.graphics.Texture;
 import com.eastvillage.emerald.Assets;
 import com.eastvillage.emerald.EmeraldGame;
+import com.eastvillage.emerald.Layers;
 import com.eastvillage.emerald.battle.battlefield.Battlefield;
 import com.eastvillage.emerald.battle.battlefield.Hex;
 import com.eastvillage.emerald.battle.battlefield.Tile;
@@ -23,7 +24,7 @@ public class ClickableTilesController implements BattlefieldInputListener {
         this.battlefield = battlefield;
 
         hoverShadow = new GameObject();
-        hoverShadow.addComponent(new TexRenderer(hoverShadow.transform, (Texture) EmeraldGame.getAsset(Assets.HOVER_SHADOW)));
+        hoverShadow.addComponent(new TexRenderer(hoverShadow.transform, (Texture) EmeraldGame.getAsset(Assets.HOVER_SHADOW)).setZ(Layers.SHADOWS));
     }
 
     /** Clear the set of clickable tiles. */

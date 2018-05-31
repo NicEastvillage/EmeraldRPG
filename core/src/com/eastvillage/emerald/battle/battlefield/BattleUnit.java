@@ -1,5 +1,6 @@
 package com.eastvillage.emerald.battle.battlefield;
 
+import com.eastvillage.emerald.Layers;
 import com.eastvillage.emerald.battle.Allegiance;
 import com.eastvillage.emerald.unit.Unit;
 import com.eastvillage.engine.GameObject;
@@ -18,7 +19,7 @@ public class BattleUnit extends GameObject {
 
         texRenderer = new TexRenderer(transform, unit.getTexture());
         texRenderer.flipTex(allegiance.isSpriteFlipped(), false);
-        texRenderer.setZ(1);
+        texRenderer.setZ(Layers.UNITS);
         addComponent(texRenderer);
     }
 

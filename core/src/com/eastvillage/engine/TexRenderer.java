@@ -76,8 +76,9 @@ public final class TexRenderer implements Component, ZDrawable {
     }
 
     /** Set the z value of this texture. Textures with high z value will be drawn on top of textures with low z value. */
-    public void setZ(int z) {
+    public TexRenderer setZ(int z) {
         this.z = z;
+        return this;
     }
 
     @Override

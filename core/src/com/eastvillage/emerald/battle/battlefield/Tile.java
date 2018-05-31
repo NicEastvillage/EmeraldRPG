@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.emerald.Assets;
 import com.eastvillage.emerald.EmeraldGame;
+import com.eastvillage.emerald.Layers;
 import com.eastvillage.engine.GameObject;
 import com.eastvillage.engine.TexRenderer;
 import com.eastvillage.engine.TransformTree;
@@ -29,9 +30,11 @@ public class Tile extends GameObject {
 
         TextureRegion baseTexture = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.GRASS));
         baseTexRenderer = new TexRenderer(transform, baseTexture);
+        baseTexRenderer.setZ(Layers.TILES);
         addComponent(baseTexRenderer);
 
         highlightRenderer = new TexRenderer(transform, (Texture) null);
+        highlightRenderer.setZ(Layers.HIGHLIGHTS);
         highlightRenderer.enable(false);
         addComponent(highlightRenderer);
     }
