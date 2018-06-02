@@ -60,6 +60,7 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
                 turnController.current().changeState(TurnState.IDLE);
             } else if (unit != null && possibleAttacks.contains(unit)) {
                 attack(turnController.current().getUnit(), unit);
+                resolveDeath(unit);
                 turnController.current().changeState(TurnState.ENDED);
             }
         }
@@ -77,6 +78,14 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
 
         target.getUnit().takeDamage(total);
         System.out.println(target.getUnit().getType() + " took " + total + " damage!");
+    }
+
+    /** Resolves everything about a unit dying, if it is dead. */
+    public void resolveDeath(BattleUnit unit) {
+        if (unit.getUnit().isDead()) {
+            battlefield.removeUnit(unit);
+            turnController.remove(unit);
+        }
     }
 
     @Override

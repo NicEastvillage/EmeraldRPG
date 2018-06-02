@@ -83,6 +83,15 @@ public class Battlefield extends GameObject {
         return prev;
     }
 
+    /** Removes a unit from the battlefield. */
+    public boolean removeUnit(BattleUnit unit) {
+        Hex pos = getPositionOf(unit);
+        if (pos == null) return false;
+        unitMap.remove(unit);
+        unit.transform.setParent(null);
+        return true;
+    }
+
     /** Returns the hex, where the given unit is placed. Returns null if the unit is not placed on this battlefield. */
     public Hex getPositionOf(BattleUnit unit) {
         return unitMap.get(unit);
