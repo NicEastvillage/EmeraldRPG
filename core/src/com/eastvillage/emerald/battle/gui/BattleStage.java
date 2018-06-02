@@ -19,7 +19,13 @@ public class BattleStage extends Stage {
         this.controller = controller;
 
         setupTop(skin);
-        setupTopRight(skin);
+
+        topRightRoot = new HoverDetails(controller, skin);
+        topRightRoot.setFillParent(true);
+        topRightRoot.setDebug(true);
+        topRightRoot.top().right();
+        topRightRoot.pad(20);
+        addActor(topRightRoot);
     }
 
     private void setupTop(Skin skin) {
@@ -40,26 +46,5 @@ public class BattleStage extends Stage {
             }
         });
         topRoot.add(endTurnButton).size(150, 70);
-    }
-
-    private void setupTopRight(Skin skin) {
-        topRightRoot = new Table(skin);
-        topRightRoot.setFillParent(true);
-        topRightRoot.setDebug(true);
-        topRightRoot.top().right();
-        topRightRoot.pad(20);
-        addActor(topRightRoot);
-
-        topRightRoot.columnDefaults(0).width(150);
-
-        Image image = new Image(skin.getDrawable("portrait-frame"));
-        topRightRoot.add(image).size(150, 150).spaceBottom(10).row();
-
-        topRightRoot.add(new Label("Name of unit", skin)).spaceBottom(10).row();
-        topRightRoot.add(new Label("Health: X/X", skin)).row();
-        topRightRoot.add(new Label("Attack: X", skin)).row();
-        topRightRoot.add(new Label("Defence: X", skin)).row();
-        topRightRoot.add(new Label("Movement: X", skin)).row();
-        topRightRoot.add(new Label("Range: X", skin)).row();
     }
 }
