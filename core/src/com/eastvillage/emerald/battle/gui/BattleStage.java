@@ -45,12 +45,21 @@ public class BattleStage extends Stage {
     private void setupTopRight(Skin skin) {
         topRightRoot = new Table(skin);
         topRightRoot.setFillParent(true);
-        //topRightRoot.setDebug(true);
+        topRightRoot.setDebug(true);
         topRightRoot.top().right();
         topRightRoot.pad(20);
         addActor(topRightRoot);
 
+        topRightRoot.columnDefaults(0).width(150);
+
         Image image = new Image(skin.getDrawable("portrait-frame"));
-        topRightRoot.add(image).size(150, 150);
+        topRightRoot.add(image).size(150, 150).spaceBottom(10).row();
+
+        topRightRoot.add(new Label("Name of unit", skin)).spaceBottom(10).row();
+        topRightRoot.add(new Label("Health: X/X", skin)).row();
+        topRightRoot.add(new Label("Attack: X", skin)).row();
+        topRightRoot.add(new Label("Defence: X", skin)).row();
+        topRightRoot.add(new Label("Movement: X", skin)).row();
+        topRightRoot.add(new Label("Range: X", skin)).row();
     }
 }
