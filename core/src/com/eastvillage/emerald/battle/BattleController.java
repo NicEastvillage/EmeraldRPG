@@ -89,6 +89,21 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     }
 
     @Override
+    public void onTileDragged(Tile prev, Tile now, int button) {
+
+    }
+
+    @Override
+    public void onTileTouchDown(Tile tile) {
+
+    }
+
+    @Override
+    public void onTileTouchUp(Tile tile) {
+
+    }
+
+    @Override
     public void onQueueCycle(TurnController turnController) {
 
     }

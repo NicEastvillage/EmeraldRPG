@@ -94,4 +94,19 @@ public class ClickableTilesController implements BattlefieldInputListener {
     public void onTileClicked(Tile tile, int button) {
 
     }
+
+    @Override
+    public void onTileDragged(Tile prev, Tile now, int button) {
+
+    }
+
+    @Override
+    public void onTileTouchDown(Tile tile) {
+
+    }
+
+    @Override
+    public void onTileTouchUp(Tile tile) {
+
+    }
 }

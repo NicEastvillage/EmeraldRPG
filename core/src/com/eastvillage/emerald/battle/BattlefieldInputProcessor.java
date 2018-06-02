@@ -21,6 +21,8 @@ public class BattlefieldInputProcessor extends InputAdapter {
     private boolean isDown = false;
     private Hex downedHex;
     private int downButton = -1;
+    private Hex dragPrevHex;
+    private boolean dragHappened = false;
 
     public BattlefieldInputProcessor(Battlefield battlefield, OrthographicCamera camera) {
         this.battlefield = battlefield;
@@ -53,23 +55,60 @@ public class BattlefieldInputProcessor extends InputAdapter {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         isDown = true;
+        dragHappened = false;
         downedHex = mouseToHex(screenX, screenY);
+        dragPrevHex = downedHex;
         downButton = button;
-        return battlefield.isWithin(downedHex);
+        if (battlefield.isWithin(downedHex)) {
+            Tile tile = battlefield.getTile(downedHex);
+            for (BattlefieldInputListener listener : listeners) {
+                listener.onTileTouchDown(tile);
+            }
+        }
+        return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         Hex upHex = mouseToHex(screenX, screenY);
         if (isDown && downButton == button) {
-            if (battlefield.isWithin(upHex) && upHex.equals(downedHex)) {
-                // click
+            if (battlefield.isWithin(upHex)) {
                 Tile tile = battlefield.getTile(upHex);
+                // Touch up
                 for (BattlefieldInputListener listener : listeners) {
-                    listener.onTileClicked(tile, button);
+                    listener.onTileTouchUp(tile);
                 }
+
+                if (!dragHappened && upHex.equals(downedHex)) {
+                    // click // TODO If touch is dragged away and back, it's still a click. It should not be.
+                    for (BattlefieldInputListener listener : listeners) {
+                        listener.onTileClicked(tile, button);
+                    }
+                }
+
+                // Do a move to the new pos
+                mouseMoved(screenX, screenY);
                 return true;
             }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        if (isDown) {
+            Hex dragHex = mouseToHex(screenX, screenY);
+            if (!dragPrevHex.equals(dragHex)) {
+                // Drag
+                Tile prev = battlefield.getTile(dragPrevHex);
+                Tile tile = battlefield.getTile(dragHex);
+                dragHappened = true;
+                for (BattlefieldInputListener listener : listeners) {
+                    listener.onTileDragged(prev, tile, downButton);
+                }
+                dragPrevHex = dragHex;
+            }
+            return true;
         }
         return false;
     }
