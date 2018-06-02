@@ -1,21 +1,16 @@
 package com.eastvillage.emerald.battle.gui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.eastvillage.emerald.Assets;
-import com.eastvillage.emerald.EmeraldGame;
 import com.eastvillage.emerald.battle.BattleController;
 
 public class BattleStage extends Stage {
 
     private BattleController controller;
-    private Table root;
+    private Table topRoot;
+    private Table topRightRoot;
     private EndTurnButton endTurnButton;
 
     public BattleStage(BattleController controller, Skin skin) {
@@ -23,10 +18,17 @@ public class BattleStage extends Stage {
 
         this.controller = controller;
 
-        root = new Table(skin);
-        root.setFillParent(true);
-        //root.setDebug(true);
-        addActor(root);
+        setupTop(skin);
+        setupTopRight(skin);
+    }
+
+    private void setupTop(Skin skin) {
+        topRoot = new Table(skin);
+        topRoot.setFillParent(true);
+        //topRoot.setDebug(true);
+        topRoot.top();
+        topRoot.pad(20);
+        addActor(topRoot);
 
         endTurnButton = new EndTurnButton("End Turn", skin, "emerald");
         controller.getTurnController().addTurnStateListener(endTurnButton);
@@ -37,7 +39,18 @@ public class BattleStage extends Stage {
                     controller.onEndTurnButtonPressed();
             }
         });
-        root.add(endTurnButton).padTop(20).size(150, 70).fill();
-        root.top();
+        topRoot.add(endTurnButton).size(150, 70);
+    }
+
+    private void setupTopRight(Skin skin) {
+        topRightRoot = new Table(skin);
+        topRightRoot.setFillParent(true);
+        //topRightRoot.setDebug(true);
+        topRightRoot.top().right();
+        topRightRoot.pad(20);
+        addActor(topRightRoot);
+
+        Image image = new Image(skin.getDrawable("portrait-frame"));
+        topRightRoot.add(image).size(150, 150);
     }
 }
