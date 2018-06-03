@@ -13,7 +13,7 @@ import com.eastvillage.engine.TexRenderer;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class ClickableTilesController implements BattlefieldInputListener {
+public class ClickableTilesController implements BattlefieldTileInputListener {
 
     private Battlefield battlefield;
     private HashSet<Hex> clickables = new HashSet<>();
@@ -101,12 +101,12 @@ public class ClickableTilesController implements BattlefieldInputListener {
     }
 
     @Override
-    public void onTileTouchDown(Tile tile) {
+    public void onTileTouchDown(Tile tile, int button) {
 
     }
 
     @Override
-    public void onTileTouchUp(Tile tile) {
+    public void onTileTouchUp(Tile tile, int button) {
 
     }
 }

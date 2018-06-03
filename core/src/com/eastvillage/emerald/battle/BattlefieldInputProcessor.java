@@ -3,6 +3,7 @@ package com.eastvillage.emerald.battle;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.eastvillage.emerald.battle.battlefield.BattleUnit;
 import com.eastvillage.emerald.battle.battlefield.Battlefield;
 import com.eastvillage.emerald.battle.battlefield.Hex;
 import com.eastvillage.emerald.battle.battlefield.Tile;
@@ -14,7 +15,8 @@ public class BattlefieldInputProcessor extends InputAdapter {
     private Battlefield battlefield;
     private OrthographicCamera camera;
 
-    private ArrayList<BattlefieldInputListener> listeners;
+    private ArrayList<BattlefieldTileInputListener> tileInputListeners;
+    private ArrayList<BattlefieldUnitInputListener> unitInputListeners;
 
     private Hex hoveredHex;
 
@@ -27,7 +29,8 @@ public class BattlefieldInputProcessor extends InputAdapter {
     public BattlefieldInputProcessor(Battlefield battlefield, OrthographicCamera camera) {
         this.battlefield = battlefield;
         this.camera = camera;
-        listeners = new ArrayList<>();
+        tileInputListeners = new ArrayList<>();
+        unitInputListeners = new ArrayList<>();
     }
 
     @Override
@@ -36,8 +39,14 @@ public class BattlefieldInputProcessor extends InputAdapter {
         if (!hex.equals(hoveredHex) && battlefield.isWithin(hoveredHex)) {
             // hover end
             Tile tile = battlefield.getTile(hoveredHex);
-            for (BattlefieldInputListener listener : listeners) {
+            BattleUnit unit = battlefield.getUnitAt(hoveredHex);
+            for (BattlefieldTileInputListener listener : tileInputListeners) {
                 listener.onTileHoverEnd(tile);
+            }
+            if (unit != null) {
+                for (BattlefieldUnitInputListener listener : unitInputListeners) {
+                    listener.onUnitHoverEnd(tile, unit);
+                }
             }
         }
 
@@ -45,8 +54,14 @@ public class BattlefieldInputProcessor extends InputAdapter {
         if (battlefield.isWithin(hoveredHex)) {
             // hover begin
             Tile tile = battlefield.getTile(hoveredHex);
-            for (BattlefieldInputListener listener : listeners) {
+            BattleUnit unit = battlefield.getUnitAt(hoveredHex);
+            for (BattlefieldTileInputListener listener : tileInputListeners) {
                 listener.onTileHoverBegin(tile);
+            }
+            if (unit != null) {
+                for (BattlefieldUnitInputListener listener : unitInputListeners) {
+                    listener.onUnitHoverBegin(tile, unit);
+                }
             }
         }
         return false;
@@ -61,8 +76,14 @@ public class BattlefieldInputProcessor extends InputAdapter {
         downButton = button;
         if (battlefield.isWithin(downedHex)) {
             Tile tile = battlefield.getTile(downedHex);
-            for (BattlefieldInputListener listener : listeners) {
-                listener.onTileTouchDown(tile);
+            BattleUnit unit = battlefield.getUnitAt(downedHex);
+            for (BattlefieldTileInputListener listener : tileInputListeners) {
+                listener.onTileTouchDown(tile, button);
+            }
+            if (unit != null) {
+                for (BattlefieldUnitInputListener listener : unitInputListeners) {
+                    listener.onUnitTouchDown(tile, unit, button);
+                }
             }
         }
         return false;
@@ -74,15 +95,27 @@ public class BattlefieldInputProcessor extends InputAdapter {
         if (isDown && downButton == button) {
             if (battlefield.isWithin(upHex)) {
                 Tile tile = battlefield.getTile(upHex);
+                BattleUnit unit = battlefield.getUnitAt(upHex);
+
                 // Touch up
-                for (BattlefieldInputListener listener : listeners) {
-                    listener.onTileTouchUp(tile);
+                for (BattlefieldTileInputListener listener : tileInputListeners) {
+                    listener.onTileTouchUp(tile, button);
+                }
+                if (unit != null) {
+                    for (BattlefieldUnitInputListener listener : unitInputListeners) {
+                        listener.onUnitTouchUp(tile, unit, button);
+                    }
                 }
 
                 if (!dragHappened && upHex.equals(downedHex)) {
-                    // click // TODO If touch is dragged away and back, it's still a click. It should not be.
-                    for (BattlefieldInputListener listener : listeners) {
+                    // click
+                    for (BattlefieldTileInputListener listener : tileInputListeners) {
                         listener.onTileClicked(tile, button);
+                    }
+                    if (unit != null) {
+                        for (BattlefieldUnitInputListener listener : unitInputListeners) {
+                            listener.onUnitClicked(tile, unit, button);
+                        }
                     }
                 }
 
@@ -103,7 +136,7 @@ public class BattlefieldInputProcessor extends InputAdapter {
                 Tile prev = battlefield.getTile(dragPrevHex);
                 Tile tile = battlefield.getTile(dragHex);
                 dragHappened = true;
-                for (BattlefieldInputListener listener : listeners) {
+                for (BattlefieldTileInputListener listener : tileInputListeners) {
                     listener.onTileDragged(prev, tile, downButton);
                 }
                 dragPrevHex = dragHex;
@@ -119,14 +152,24 @@ public class BattlefieldInputProcessor extends InputAdapter {
         return battlefield.pointToHex(worldPos.x, worldPos.y);
     }
 
-    /** Register a listener. */
-    public void addListener(BattlefieldInputListener listener) {
-        listeners.add(listener);
+    /** Register a tile input listener. */
+    public void addTileInputListener(BattlefieldTileInputListener listener) {
+        tileInputListeners.add(listener);
     }
 
-    /** Remove a listener. Returns true if the listener is registered and now removed. */
-    public boolean removeListener(BattlefieldInputListener listener) {
-        return listeners.remove(listener);
+    /** Register a unit input listener. */
+    public void addUnitInputListener(BattlefieldUnitInputListener listener) {
+        unitInputListeners.add(listener);
+    }
+
+    /** Remove a tile listener. Returns true if the listener is registered and now removed. */
+    public boolean removeTileInputListener(BattlefieldTileInputListener listener) {
+        return tileInputListeners.remove(listener);
+    }
+
+    /** Remove a unit listener. Returns true if the listener is registered and now removed. */
+    public boolean removeUnitInputListener(BattlefieldUnitInputListener listener) {
+        return unitInputListeners.remove(listener);
     }
 
     public Battlefield getBattlefield() {

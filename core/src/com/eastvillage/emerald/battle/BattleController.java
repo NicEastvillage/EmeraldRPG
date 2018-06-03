@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.function.Function;
 
-public class BattleController implements BattlefieldInputListener, TurnQueueListener, TurnStateListener, TurnEndListener {
+public class BattleController implements BattlefieldTileInputListener, TurnQueueListener, TurnStateListener, TurnEndListener {
 
     private Battlefield battlefield;
     private TurnController turnController;
@@ -31,11 +31,11 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
         turnController.setTurnEndListener(this);
 
         inputProcessor = new BattlefieldInputProcessor(battlefield, camera);
-        inputProcessor.addListener(this);
+        inputProcessor.addTileInputListener(this);
 
         highlightController = new HighlightController(battlefield);
         clickableTiles = new ClickableTilesController(battlefield);
-        inputProcessor.addListener(clickableTiles);
+        inputProcessor.addTileInputListener(clickableTiles);
 
         turnController.start();
     }
@@ -94,12 +94,12 @@ public class BattleController implements BattlefieldInputListener, TurnQueueList
     }
 
     @Override
-    public void onTileTouchDown(Tile tile) {
+    public void onTileTouchDown(Tile tile, int button) {
 
     }
 
     @Override
-    public void onTileTouchUp(Tile tile) {
+    public void onTileTouchUp(Tile tile, int button) {
 
     }
 
