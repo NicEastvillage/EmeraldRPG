@@ -33,6 +33,11 @@ public class Ranger implements UnitType {
     }
 
     @Override
+    public String getTypeName() {
+        return "Ranger";
+    }
+
+    @Override
     public TextureRegion getTexture(Unit unit) {
         return new TextureRegion((Texture) EmeraldGame.getAsset(Assets.RANGER));
     }

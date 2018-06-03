@@ -4,11 +4,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.eastvillage.emerald.battle.BattleController;
+import com.eastvillage.emerald.battle.BattlefieldUnitInputListener;
+import com.eastvillage.emerald.battle.battlefield.BattleUnit;
+import com.eastvillage.emerald.battle.battlefield.Tile;
+import com.eastvillage.emerald.unit.Unit;
 
-public class HoverDetails extends Table {
+public class HoverDetails extends Table implements BattlefieldUnitInputListener {
 
     private BattleController controller;
+
+    private BattleUnit hoveredUnit;
 
     private Label labelName;
     private Label labelHealth;
@@ -33,11 +40,53 @@ public class HoverDetails extends Table {
         labelMovement = new Label("Movement: X", skin);
         labelRange = new Label("Range: X", skin);
 
+        labelName.setAlignment(Align.center);
+
         add(labelName).spaceBottom(10).row();
         add(labelHealth).row();
         add(labelAttack).row();
         add(labelDefence).row();
         add(labelMovement).row();
         add(labelRange).row();
+
+        setVisible(false);
+    }
+
+    public void showDetails(BattleUnit bUnit) {
+        Unit unit = bUnit.getUnit();
+        labelName.setText(unit.getType().getTypeName());
+        labelHealth.setText(String.format("Health: %d/%d", unit.getCurrentHealth(), unit.getMaxHealth()));
+        labelAttack.setText(String.format("Attack: %d-%d", unit.getAttack(), unit.getAttack() * 2));
+        labelDefence.setText(String.format("Defence: %d-%d", unit.getDefence(), unit.getDefence() * 2));
+        labelMovement.setText(String.format("Movement: %d", unit.getMovementSpeed()));
+        labelRange.setText(String.format("Range: %d", Math.max(1, unit.getRange())));
+    }
+
+    @Override
+    public void onUnitHoverBegin(Tile tile, BattleUnit unit) {
+        hoveredUnit = unit;
+        showDetails(unit);
+        setVisible(true);
+    }
+
+    @Override
+    public void onUnitHoverEnd(Tile tile, BattleUnit unit) {
+        hoveredUnit = null;
+        setVisible(false);
+    }
+
+    @Override
+    public void onUnitTouchDown(Tile tile, BattleUnit unit, int button) {
+
+    }
+
+    @Override
+    public void onUnitTouchUp(Tile tile, BattleUnit unit, int button) {
+
+    }
+
+    @Override
+    public void onUnitClicked(Tile tile, BattleUnit unit, int button) {
+
     }
 }

@@ -9,5 +9,6 @@ public interface UnitType {
     int getAttack(Unit unit);
     int getRange(Unit unit);
     int getMovementSpeed(Unit unit);
+    String getTypeName();
     TextureRegion getTexture(Unit unit);
 }

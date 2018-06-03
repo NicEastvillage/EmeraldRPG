@@ -33,6 +33,11 @@ public class Priest implements UnitType {
     }
 
     @Override
+    public String getTypeName() {
+        return "Priest";
+    }
+
+    @Override
     public TextureRegion getTexture(Unit unit) {
         return new TextureRegion((Texture) EmeraldGame.getAsset(Assets.PRIEST));
     }

@@ -33,6 +33,11 @@ public class Knight implements UnitType {
     }
 
     @Override
+    public String getTypeName() {
+        return "Knight";
+    }
+
+    @Override
     public TextureRegion getTexture(Unit unit) {
         return new TextureRegion((Texture) EmeraldGame.getAsset(Assets.KNIGHT));
     }

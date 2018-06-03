@@ -10,7 +10,7 @@ public class BattleStage extends Stage {
 
     private BattleController controller;
     private Table topRoot;
-    private Table topRightRoot;
+    private HoverDetails topRightRoot;
     private EndTurnButton endTurnButton;
 
     public BattleStage(BattleController controller, Skin skin) {
@@ -22,10 +22,11 @@ public class BattleStage extends Stage {
 
         topRightRoot = new HoverDetails(controller, skin);
         topRightRoot.setFillParent(true);
-        topRightRoot.setDebug(true);
+        //topRightRoot.setDebug(true);
         topRightRoot.top().right();
         topRightRoot.pad(20);
         addActor(topRightRoot);
+        controller.getInputProcessor().addUnitInputListener(topRightRoot);
     }
 
     private void setupTop(Skin skin) {
