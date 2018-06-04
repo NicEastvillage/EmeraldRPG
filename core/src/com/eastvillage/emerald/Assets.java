@@ -15,4 +15,6 @@ public class Assets {
     public static final String HIGHLIGHT_MOVE = "battlefield/valid move highlight.png";
     public static final String HIGHLIGHT_ATTACK = "battlefield/valid attack highlight.png";
     public static final String HIGHLIGHT_CURRENT_UNIT = "battlefield/current unit highlight.png";
+
+    public static final String HIGHLIGHT_RANGE = "battlefield/range highlight.png";
 }
