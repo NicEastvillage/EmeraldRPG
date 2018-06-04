@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Pool;
 import com.eastvillage.emerald.Assets;
 import com.eastvillage.emerald.EmeraldGame;
+import com.eastvillage.emerald.Layers;
 import com.eastvillage.engine.GameObject;
 import com.eastvillage.engine.TexRenderer;
 import com.eastvillage.engine.TransformTree;
@@ -54,43 +55,43 @@ public class RangeHighlightController {
         };
     }
 
+    /** Display a range given a center and a range. */
     public void display(Hex center, int range) {
+
+        clear();
 
         HexDirection[] dirs = HexDirection.values();
         Hex cur = center.add(dirs[0].asHex().scale(range));
 
         for (int i = 0; i < dirs.length; i++) {
             for (int j = 0; j < range; j++) {
+                if (battlefield.isWithin(cur)) {
+                    TransformTree<GameObject> tileTf = battlefield.getTile(cur).transform;
 
-                TransformTree<GameObject> tileTf = battlefield.getTile(cur).transform;
+                    createHighlightForDirection(dirs, j - 1, tileTf);
+                    createHighlightForDirection(dirs, j - 2, tileTf);
 
-                // Current direction minus 1
-                HexDirection dir1 = dirs[(j + 5) % 6];
-                RangeHighlight highlight1 = highlightPool.obtain();
-                highlight1.init(tileTf, dirToTexMap.get(dir1));
-                activeHighlights.add(highlight1);
-
-                // Current direction minus 2
-                HexDirection dir2 = dirs[(j + 4) % 6];
-                RangeHighlight highlight2 = highlightPool.obtain();
-                highlight2.init(tileTf, dirToTexMap.get(dir2));
-                activeHighlights.add(highlight2);
-
-                if (j == 0) {
-                    // Current direction minus 3
-                    HexDirection dir3 = dirs[(j + 3) % 6];
-                    RangeHighlight highlight3 = highlightPool.obtain();
-                    highlight2.init(tileTf, dirToTexMap.get(dir3));
-                    activeHighlights.add(highlight3);
+                    if (j == 0) {
+                        createHighlightForDirection(dirs, j - 3, tileTf);
+                    }
                 }
-
                 cur = cur.add(dirs[i].asHex());
             }
         }
     }
 
-    /** Hides the current highlighted range. */
-    public void hide() {
+    /** Place a highlight at with the tile transform as parent, using the direction in dirs given by the index. */
+    private void createHighlightForDirection(HexDirection[] dirs, int index, TransformTree<GameObject> tileTf) {
+        index %= 6;
+        if (index < 0) index += 6;
+
+        RangeHighlight highlight = highlightPool.obtain();
+        highlight.init(tileTf, dirToTexMap.get(dirs[index]));
+        activeHighlights.add(highlight);
+    }
+
+    /** Clears the currently highlighted range. */
+    public void clear() {
         for (RangeHighlight activeHighlight : activeHighlights) {
             highlightPool.free(activeHighlight);
         }
@@ -108,6 +109,7 @@ public class RangeHighlightController {
             GameObject go = new GameObject();
             transform = go.transform;
             TexRenderer renderer = new TexRenderer(transform, (TextureRegion) null);
+            renderer.setZ(Layers.RANGE_HIGHLIGHTS);
             go.addComponent(renderer);
         }
 
