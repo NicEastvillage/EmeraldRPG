@@ -14,6 +14,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
     private TurnController turnController;
     private BattlefieldInputProcessor inputProcessor;
     private HighlightController highlightController;
+    private RangeHighlightController rangeHighlightController;
     private ClickableTilesController clickableTiles;
 
     private HashSet<Hex> possibleMoveHexes = new HashSet<>();
@@ -36,6 +37,8 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         highlightController = new HighlightController(battlefield);
         clickableTiles = new ClickableTilesController(battlefield);
         inputProcessor.addTileInputListener(clickableTiles);
+        rangeHighlightController = new RangeHighlightController(battlefield);
+        inputProcessor.addTileInputListener(rangeHighlightController);
 
         turnController.start();
     }
@@ -147,8 +150,12 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
 
             highlightController.setValidMoves(possibleMoveHexes);
             clickableTiles.addAll(possibleMoveHexes);
+            rangeHighlightController.setRange(turn.getUnit().getUnit().getRange());
+            rangeHighlightController.setHexes(possibleMoveHexes);
+            rangeHighlightController.addHex(start);
         } else {
             possibleMoveHexes.clear();
+            rangeHighlightController.clearHexes();
         }
     }
 

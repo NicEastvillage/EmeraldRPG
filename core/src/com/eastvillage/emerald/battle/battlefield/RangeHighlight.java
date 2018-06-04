@@ -13,16 +13,16 @@ import com.eastvillage.engine.TransformTree;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class RangeHighlightController {
+public class RangeHighlight {
 
     private final TextureRegion TEX_E, TEX_NE, TEX_NW, TEX_W, TEX_SW, TEX_SE;
 
     private Battlefield battlefield;
-    private Pool<RangeHighlight> highlightPool;
-    private ArrayList<RangeHighlight> activeHighlights;
+    private Pool<Highlight> highlightPool;
+    private ArrayList<Highlight> activeHighlights = new ArrayList<>();
     private HashMap<HexDirection, TextureRegion> dirToTexMap;
 
-    public RangeHighlightController(Battlefield battlefield) {
+    public RangeHighlight(Battlefield battlefield) {
         this.battlefield = battlefield;
 
         Texture texture = EmeraldGame.getAsset(Assets.HIGHLIGHT_RANGE);
@@ -47,10 +47,10 @@ public class RangeHighlightController {
         dirToTexMap.put(HexDirection.SW, TEX_SW);
         dirToTexMap.put(HexDirection.SE, TEX_SE);
 
-        highlightPool = new Pool<RangeHighlight>() {
+        highlightPool = new Pool<Highlight>() {
             @Override
-            protected RangeHighlight newObject() {
-                return new RangeHighlight();
+            protected Highlight newObject() {
+                return new Highlight();
             }
         };
     }
@@ -61,18 +61,18 @@ public class RangeHighlightController {
         clear();
 
         HexDirection[] dirs = HexDirection.values();
-        Hex cur = center.add(dirs[0].asHex().scale(range));
+        Hex cur = center.add(dirs[4].asHex().scale(range));
 
         for (int i = 0; i < dirs.length; i++) {
             for (int j = 0; j < range; j++) {
                 if (battlefield.isWithin(cur)) {
                     TransformTree<GameObject> tileTf = battlefield.getTile(cur).transform;
 
-                    createHighlightForDirection(dirs, j - 1, tileTf);
-                    createHighlightForDirection(dirs, j - 2, tileTf);
+                    createHighlightForDirection(dirs, i - 1, tileTf);
+                    createHighlightForDirection(dirs, i - 2, tileTf);
 
                     if (j == 0) {
-                        createHighlightForDirection(dirs, j - 3, tileTf);
+                        createHighlightForDirection(dirs, i - 3, tileTf);
                     }
                 }
                 cur = cur.add(dirs[i].asHex());
@@ -85,30 +85,30 @@ public class RangeHighlightController {
         index %= 6;
         if (index < 0) index += 6;
 
-        RangeHighlight highlight = highlightPool.obtain();
+        Highlight highlight = highlightPool.obtain();
         highlight.init(tileTf, dirToTexMap.get(dirs[index]));
         activeHighlights.add(highlight);
     }
 
     /** Clears the currently highlighted range. */
     public void clear() {
-        for (RangeHighlight activeHighlight : activeHighlights) {
+        for (Highlight activeHighlight : activeHighlights) {
             highlightPool.free(activeHighlight);
         }
         activeHighlights.clear();
     }
 
-    /** The Range Highlight is a struct-like class that holds a reference to the GameObject with a TexRenderer, that
+    /** The Highlight is a struct-like class that holds a reference to the GameObject with a TexRenderer, that
      * displays the texture. It's a Poolable. */
-    private class RangeHighlight implements Pool.Poolable {
+    private class Highlight implements Pool.Poolable {
 
         private TransformTree<GameObject> transform;
         private TexRenderer renderer;
 
-        public RangeHighlight() {
+        public Highlight() {
             GameObject go = new GameObject();
             transform = go.transform;
-            TexRenderer renderer = new TexRenderer(transform, (TextureRegion) null);
+            renderer = new TexRenderer(transform, (TextureRegion) null);
             renderer.setZ(Layers.RANGE_HIGHLIGHTS);
             go.addComponent(renderer);
         }
