@@ -1,13 +1,18 @@
 package com.eastvillage.emerald.unit.stat;
 
+import com.eastvillage.utility.math.EMath;
+
 public class Stat {
 
-    protected int finalValue;
-    protected int baseValue;
-    protected int positiveFlatModifiers = 0;
-    protected float positivePercentageModifiers = 0;
-    protected int negativeFlatModifiers = 0;            // stored as negative number
-    protected float negativePercentageModifiers = 0;     // stored as negative number
+    private int finalValue;
+    private int baseValue;
+    private int positiveFlatModifiers = 0;
+    private float positivePercentageModifiers = 0;
+    private int negativeFlatModifiers = 0;            // stored as negative number
+    private float negativePercentageModifiers = 0;     // stored as negative number
+
+    private int upperLimit = Integer.MAX_VALUE;
+    private int lowerLimit = Integer.MIN_VALUE;
 
     public Stat(int baseValue) {
         this.baseValue = baseValue;
@@ -17,6 +22,7 @@ public class Stat {
     private int recalcFinalValue() {
         // positives are added first, then negatives
         finalValue = (int) ((baseValue + positiveFlatModifiers) * (1 + positivePercentageModifiers + negativePercentageModifiers) + negativeFlatModifiers);
+        finalValue = EMath.clamp(finalValue, lowerLimit, upperLimit);
         return finalValue;
     }
 
@@ -68,5 +74,36 @@ public class Stat {
             negativePercentageModifiers += val;
         }
         return recalcFinalValue();
+    }
+
+    /** Restrict this Stat between two limits. Default limits are INT_MIN and INT_MAX. */
+    public Stat setLimits(int lower, int upper) {
+        if (lower > upper) throw new StatLimitOverlapException(lower, upper);
+        lowerLimit = lower;
+        upperLimit = upper;
+        recalcFinalValue();
+        return this;
+    }
+
+    /** Restrict this Stat between lower than a certain limit. Default upper limit INT_MAX. */
+    public Stat setUpperLimit(int limit) {
+        upperLimit = limit;
+        recalcFinalValue();
+        return this;
+    }
+
+    /** Restrict this Stat between greater than a certain limit. Default lower limit INT_MIN. */
+    public Stat setLowerLimit(int limit) {
+        lowerLimit = limit;
+        recalcFinalValue();
+        return this;
+    }
+
+    public int getUpperLimit() {
+        return upperLimit;
+    }
+
+    public int getLowerLimit() {
+        return lowerLimit;
     }
 }

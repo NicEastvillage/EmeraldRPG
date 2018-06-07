@@ -16,11 +16,11 @@ public class Unit {
     public Unit(int owner, UnitType type) {
         this.type = type;
 
-        maxHealth = new Stat(type.getBaseMaxHealth());
+        maxHealth = new Stat(type.getBaseMaxHealth()).setLowerLimit(1);
         defense = new Stat(type.getBaseDefense());
-        attack = new Stat(type.getBaseAttack());
-        range = new Stat(type.getBaseRange());
-        movementSpeed = new Stat(type.getBaseMovementSpeed());
+        attack = new Stat(type.getBaseAttack()).setLowerLimit(0);
+        range = new Stat(type.getBaseRange()).setLowerLimit(1);
+        movementSpeed = new Stat(type.getBaseMovementSpeed()).setLowerLimit(0);
 
         currentHealth = maxHealth.getValue();
     }
