@@ -9,27 +9,27 @@ import com.eastvillage.emerald.unit.Unit;
 public class Knight implements UnitType {
 
     @Override
-    public int getMaxHealth(Unit unit) {
+    public int getBaseMaxHealth() {
         return 30;
     }
 
     @Override
-    public int getDefence(Unit unit) {
+    public int getBaseDefense() {
         return 3;
     }
 
     @Override
-    public int getAttack(Unit unit) {
+    public int getBaseAttack() {
         return 4;
     }
 
     @Override
-    public int getRange(Unit unit) {
+    public int getBaseRange() {
         return 1;
     }
 
     @Override
-    public int getMovementSpeed(Unit unit) {
+    public int getBaseMovementSpeed() {
         return 3;
     }
 
@@ -39,7 +39,7 @@ public class Knight implements UnitType {
     }
 
     @Override
-    public TextureRegion getTexture(Unit unit) {
+    public TextureRegion getTexture() {
         return new TextureRegion((Texture) EmeraldGame.getAsset(Assets.KNIGHT));
     }
 }

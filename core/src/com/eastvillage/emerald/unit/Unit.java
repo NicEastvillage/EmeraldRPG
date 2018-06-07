@@ -1,18 +1,28 @@
 package com.eastvillage.emerald.unit;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.eastvillage.emerald.unit.stat.Stat;
 import com.eastvillage.emerald.unit.type.UnitType;
 
 public class Unit {
 
     private int owner;
-    private UnitType type;
+    private final UnitType type;
+
+    private final Stat maxHealth, defense, attack, range, movementSpeed;
 
     private int currentHealth;
 
     public Unit(int owner, UnitType type) {
         this.type = type;
-        currentHealth = type.getMaxHealth(this);
+
+        maxHealth = new Stat(type.getBaseMaxHealth());
+        defense = new Stat(type.getBaseDefense());
+        attack = new Stat(type.getBaseAttack());
+        range = new Stat(type.getBaseRange());
+        movementSpeed = new Stat(type.getBaseMovementSpeed());
+
+        currentHealth = maxHealth.getValue();
     }
 
     public void takeDamage(int dmg) {
@@ -36,27 +46,27 @@ public class Unit {
         return currentHealth;
     }
 
-    public int getMaxHealth() {
-        return type.getMaxHealth(this);
+    public Stat getMaxHealth() {
+        return maxHealth;
     }
 
-    public int getDefence() {
-        return type.getDefence(this);
+    public Stat getDefense() {
+        return defense;
     }
 
-    public int getAttack() {
-        return type.getAttack(this);
+    public Stat getAttack() {
+        return attack;
     }
 
-    public int getRange() {
-        return type.getRange(this);
+    public Stat getRange() {
+        return range;
     }
 
-    public int getMovementSpeed() {
-        return type.getMovementSpeed(this);
+    public Stat getMovementSpeed() {
+        return movementSpeed;
     }
 
     public TextureRegion getTexture() {
-        return type.getTexture(this);
+        return type.getTexture();
     }
 }

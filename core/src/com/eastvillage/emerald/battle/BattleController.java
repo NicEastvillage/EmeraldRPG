@@ -71,8 +71,8 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
 
     /** Make one unit deal its attack damage to another unit. */
     private void attack(BattleUnit attacker, BattleUnit target) {
-        int attack = attacker.getUnit().getAttack();
-        int defence = target.getUnit().getDefence();
+        int attack = attacker.getUnit().getAttack().getValue();
+        int defence = target.getUnit().getDefense().getValue();
 
         // damage formula
         int damage = attack + random.nextInt(attack);
@@ -140,7 +140,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
     private void findPossibleMoves(Turn turn, Hex start) {
         if (!turn.hasMoved()) {
 
-            int movement = turn.getUnit().getUnit().getMovementSpeed();
+            int movement = turn.getUnit().getUnit().getMovementSpeed().getValue();
             Function<Hex, Boolean> impassable = hex -> !battlefield.isWithin(hex) || battlefield.isOccupied(hex);
             HexPather pather = new HexPather(start, movement, impassable);
 
@@ -150,7 +150,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
 
             highlightController.setValidMoves(possibleMoveHexes);
             clickableTiles.addAll(possibleMoveHexes);
-            rangeHighlightController.setRange(turn.getUnit().getUnit().getRange());
+            rangeHighlightController.setRange(turn.getUnit().getUnit().getRange().getValue());
             rangeHighlightController.setHexes(possibleMoveHexes);
             rangeHighlightController.addHex(start);
         } else {
@@ -162,7 +162,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
     /** Find possible attacks in range of unit. Possible attacks will be stored in {@code possibleAttacks}
      * and the tiles will be highlighted. */
     private void findPossibleAttacks(BattleUnit unit, Hex pos) {
-        int range = Math.max(1, unit.getUnit().getRange());
+        int range = Math.max(1, unit.getUnit().getRange().getValue());
 
         possibleAttacks.clear();
         HashSet<Hex> possibleAttackHexes = new HashSet<>();

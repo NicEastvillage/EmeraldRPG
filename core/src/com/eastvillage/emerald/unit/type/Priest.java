@@ -9,27 +9,27 @@ import com.eastvillage.emerald.unit.Unit;
 public class Priest implements UnitType {
 
     @Override
-    public int getMaxHealth(Unit unit) {
+    public int getBaseMaxHealth() {
         return 18;
     }
 
     @Override
-    public int getDefence(Unit unit) {
+    public int getBaseDefense() {
         return 4;
     }
 
     @Override
-    public int getAttack(Unit unit) {
-        return 4;
+    public int getBaseAttack() {
+        return 3;
     }
 
     @Override
-    public int getRange(Unit unit) {
+    public int getBaseRange() {
         return 2;
     }
 
     @Override
-    public int getMovementSpeed(Unit unit) {
+    public int getBaseMovementSpeed() {
         return 3;
     }
 
@@ -39,7 +39,7 @@ public class Priest implements UnitType {
     }
 
     @Override
-    public TextureRegion getTexture(Unit unit) {
+    public TextureRegion getTexture() {
         return new TextureRegion((Texture) EmeraldGame.getAsset(Assets.PRIEST));
     }
 }

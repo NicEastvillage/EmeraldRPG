@@ -5,11 +5,11 @@ import com.eastvillage.emerald.unit.Unit;
 
 public interface UnitType {
 
-    int getMaxHealth(Unit unit);
-    int getDefence(Unit unit);
-    int getAttack(Unit unit);
-    int getRange(Unit unit);
-    int getMovementSpeed(Unit unit);
+    int getBaseMaxHealth();
+    int getBaseDefense();
+    int getBaseAttack();
+    int getBaseRange();
+    int getBaseMovementSpeed();
     String getTypeName();
-    TextureRegion getTexture(Unit unit);
+    TextureRegion getTexture();
 }

@@ -55,11 +55,11 @@ public class HoverDetails extends Table implements BattlefieldUnitInputListener 
     public void showDetails(BattleUnit bUnit) {
         Unit unit = bUnit.getUnit();
         labelName.setText(unit.getType().getTypeName());
-        labelHealth.setText(String.format("Health: %d/%d", unit.getCurrentHealth(), unit.getMaxHealth()));
-        labelAttack.setText(String.format("Attack: %d-%d", unit.getAttack(), unit.getAttack() * 2));
-        labelDefence.setText(String.format("Defence: %d-%d", unit.getDefence(), unit.getDefence() * 2));
-        labelMovement.setText(String.format("Movement: %d", unit.getMovementSpeed()));
-        labelRange.setText(String.format("Range: %d", Math.max(1, unit.getRange())));
+        labelHealth.setText(String.format("Health: %d/%d", unit.getCurrentHealth(), unit.getMaxHealth().getValue()));
+        labelAttack.setText(String.format("Attack: %d", unit.getAttack().getValue()));
+        labelDefence.setText(String.format("Defence: %d", unit.getDefense().getValue()));
+        labelMovement.setText(String.format("Movement: %d", unit.getMovementSpeed().getValue()));
+        labelRange.setText(String.format("Range: %d", unit.getRange().getValue()));
     }
 
     @Override
