@@ -1,9 +1,9 @@
 package com.eastvillage.emerald.battle.battlefield;
 
 import com.eastvillage.emerald.battle.Allegiance;
-import com.eastvillage.emerald.unit.Knight;
-import com.eastvillage.emerald.unit.Priest;
-import com.eastvillage.emerald.unit.Ranger;
+import com.eastvillage.emerald.unit.type.Knight;
+import com.eastvillage.emerald.unit.type.Priest;
+import com.eastvillage.emerald.unit.type.Ranger;
 import com.eastvillage.emerald.unit.Unit;
 import com.eastvillage.engine.GameObject;
 import com.eastvillage.engine.TransformTree;

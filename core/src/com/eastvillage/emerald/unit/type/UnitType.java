@@ -1,6 +1,7 @@
-package com.eastvillage.emerald.unit;
+package com.eastvillage.emerald.unit.type;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.eastvillage.emerald.unit.Unit;
 
 public interface UnitType {
 

@@ -1,9 +1,10 @@
-package com.eastvillage.emerald.unit;
+package com.eastvillage.emerald.unit.type;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.emerald.Assets;
 import com.eastvillage.emerald.EmeraldGame;
+import com.eastvillage.emerald.unit.Unit;
 
 public class Priest implements UnitType {
 
