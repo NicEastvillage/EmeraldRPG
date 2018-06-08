@@ -36,4 +36,9 @@ public class AmountOfDamage {
         if (finalMagical < 0) finalMagical = 0;
         return finalMagical;
     }
+
+    /** Calculates and returns the final amount of combined damage. */
+    public int getTotal() {
+        return getPhysical() + getMagical();
+    }
 }

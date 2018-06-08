@@ -1,13 +1,17 @@
 package com.eastvillage.emerald.unit;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.eastvillage.emerald.battle.AmountOfDamage;
 import com.eastvillage.emerald.unit.stat.Stat;
 import com.eastvillage.emerald.unit.type.UnitType;
+
+import java.util.Random;
 
 public class Unit {
 
     private int owner;
     private final UnitType type;
+    private Random random = new Random();
 
     private final Stat maxHealth, defense, attack, range, movementSpeed;
 
@@ -25,9 +29,19 @@ public class Unit {
         currentHealth = maxHealth.getValue();
     }
 
-    public void takeDamage(int dmg) {
-        if (dmg < 0) return;
-        currentHealth -= dmg;
+    public AmountOfDamage getStandardAttackDamage() {
+        int dmg = attack.getValue();
+        dmg = dmg + random.nextInt(dmg);
+        return new AmountOfDamage(dmg, 0);
+    }
+
+    /** Make this unit take an amount of damage. The amount will be reduced by the unit's defense. */
+    public void takeDamage(AmountOfDamage dmg) {
+        int def = defense.getValue();
+        dmg.basePhysical -= def + random.nextInt(def);
+        int dmgTaken = dmg.getTotal();
+        if (dmgTaken < 0) return;
+        currentHealth -= dmgTaken;
     }
 
     public boolean isDead() {

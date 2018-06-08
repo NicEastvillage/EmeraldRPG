@@ -69,18 +69,11 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         }
     }
 
-    /** Make one unit deal its attack damage to another unit. */
+    /** Make one unit make a standard attack against another unit. */
     private void attack(BattleUnit attacker, BattleUnit target) {
-        int attack = attacker.getUnit().getAttack().getValue();
-        int defence = target.getUnit().getDefense().getValue();
-
-        // damage formula
-        int damage = attack + random.nextInt(attack);
-        int block = defence + random.nextInt(defence);
-        int total = Math.max(0, damage - block);
-
-        target.getUnit().takeDamage(total);
-        System.out.println(target.getUnit().getType() + " took " + total + " damage!");
+        AmountOfDamage amount = attacker.getUnit().getStandardAttackDamage();
+        target.getUnit().takeDamage(amount);
+        System.out.println(target.getUnit().getType() + " took " + amount.getTotal() + " damage!");
     }
 
     /** Resolves everything about a unit dying, if it is dead. */
