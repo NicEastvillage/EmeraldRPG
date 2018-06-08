@@ -7,7 +7,11 @@ public interface UnitType {
 
     int getBaseMaxHealth();
     int getBaseDefense();
+    int getBaseMagicDefense();
     int getBaseAttack();
+    int getBaseStrength();
+    int getBaseAgility();
+    int getBaseMagicPower();
     int getBaseRange();
     int getBaseMovementSpeed();
     String getTypeName();

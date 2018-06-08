@@ -10,17 +10,37 @@ public class Knight implements UnitType {
 
     @Override
     public int getBaseMaxHealth() {
-        return 30;
+        return 80;
     }
 
     @Override
     public int getBaseDefense() {
+        return 6;
+    }
+
+    @Override
+    public int getBaseMagicDefense() {
         return 3;
     }
 
     @Override
     public int getBaseAttack() {
-        return 4;
+        return 12;
+    }
+
+    @Override
+    public int getBaseStrength() {
+        return 10;
+    }
+
+    @Override
+    public int getBaseAgility() {
+        return 5;
+    }
+
+    @Override
+    public int getBaseMagicPower() {
+        return 0;
     }
 
     @Override

@@ -10,7 +10,7 @@ public class Ranger implements UnitType {
 
     @Override
     public int getBaseMaxHealth() {
-        return 20;
+        return 65;
     }
 
     @Override
@@ -19,8 +19,28 @@ public class Ranger implements UnitType {
     }
 
     @Override
+    public int getBaseMagicDefense() {
+        return 0;
+    }
+
+    @Override
     public int getBaseAttack() {
-        return 4;
+        return 18;
+    }
+
+    @Override
+    public int getBaseStrength() {
+        return 3;
+    }
+
+    @Override
+    public int getBaseAgility() {
+        return 10;
+    }
+
+    @Override
+    public int getBaseMagicPower() {
+        return 3;
     }
 
     @Override

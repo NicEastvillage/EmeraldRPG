@@ -73,7 +73,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
     private void attack(BattleUnit attacker, BattleUnit target) {
         AmountOfDamage amount = attacker.getUnit().getStandardAttackDamage();
         target.getUnit().takeDamage(amount);
-        System.out.println(target.getUnit().getType() + " took " + amount.getTotal() + " damage!");
+        System.out.println(target.getUnit().getType().getTypeName() + " took " + amount.getTotal() + " damage!");
     }
 
     /** Resolves everything about a unit dying, if it is dead. */

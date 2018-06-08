@@ -10,17 +10,37 @@ public class Priest implements UnitType {
 
     @Override
     public int getBaseMaxHealth() {
-        return 18;
+        return 70;
     }
 
     @Override
     public int getBaseDefense() {
+        return 3;
+    }
+
+    @Override
+    public int getBaseMagicDefense() {
         return 4;
     }
 
     @Override
     public int getBaseAttack() {
+        return 14;
+    }
+
+    @Override
+    public int getBaseStrength() {
+        return 4;
+    }
+
+    @Override
+    public int getBaseAgility() {
         return 3;
+    }
+
+    @Override
+    public int getBaseMagicPower() {
+        return 6;
     }
 
     @Override
