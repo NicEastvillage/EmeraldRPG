@@ -48,6 +48,8 @@ public class BattleScreen implements Screen {
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(controller.getInputProcessor());
         Gdx.input.setInputProcessor(multiplexer);
+
+        controller.getTurnController().start();
     }
 
     public static void loadAssets(AssetManager manager) {

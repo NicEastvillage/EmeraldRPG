@@ -34,6 +34,14 @@ public class BattleStage extends Stage {
 
         spellButton = new CastSpellButton(skin);
         controller.getTurnController().addTurnStateListener(spellButton);
+        spellButton.addListener(controller);
+        spellButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!spellButton.isDisabled())
+                    spellButton.onClick(event);
+            }
+        });
         topLeft.add(spellButton).size(150, 70);
     }
 

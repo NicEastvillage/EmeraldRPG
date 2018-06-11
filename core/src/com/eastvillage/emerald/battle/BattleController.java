@@ -2,6 +2,7 @@ package com.eastvillage.emerald.battle;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.eastvillage.emerald.battle.battlefield.*;
+import com.eastvillage.emerald.battle.gui.CastSpellButtonListener;
 import com.eastvillage.emerald.battle.gui.EndTurnButtonListener;
 import com.eastvillage.emerald.battle.turn.*;
 
@@ -9,7 +10,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.function.Function;
 
-public class BattleController implements BattlefieldTileInputListener, TurnQueueListener, TurnStateListener, TurnEndListener, EndTurnButtonListener {
+public class BattleController implements BattlefieldTileInputListener, TurnQueueListener, TurnStateListener, TurnEndListener, EndTurnButtonListener, CastSpellButtonListener {
 
     private Battlefield battlefield;
     private TurnController turnController;
@@ -39,8 +40,6 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         inputProcessor.addTileInputListener(clickableTiles);
         rangeHighlightController = new RangeHighlightController(battlefield);
         inputProcessor.addTileInputListener(rangeHighlightController);
-
-        turnController.start();
     }
 
     @Override
@@ -197,6 +196,21 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
     @Override
     public void onEndTurnButtonPressed() {
         turnController.current().changeState(TurnState.ENDED);
+    }
+
+    @Override
+    public void onCastSpellButtonStartSelecting() {
+        turnController.current().changeState(TurnState.SELECTING_SPECIAL);
+    }
+
+    @Override
+    public void onCastSpellButtonCancelSelecting() {
+        turnController.current().changeState(TurnState.IDLE);
+    }
+
+    @Override
+    public void onCastSpellButtonCancelTargeting() {
+        turnController.current().changeState(TurnState.SELECTING_SPECIAL);
     }
 
     public Battlefield getBattlefield() {
