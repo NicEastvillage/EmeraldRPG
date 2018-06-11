@@ -28,7 +28,6 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
 
         turnController = new TurnController(battlefield.getAllUnits());
         turnController.addQueueListener(this);
-        turnController.current().addStateListener(this); // first turn must be added directly
         turnController.addTurnStateListener(this);
         turnController.setTurnEndListener(this);
 

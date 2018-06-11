@@ -13,6 +13,7 @@ public class TurnController implements TurnEndListener {
     private LinkedList<TurnStateListener> turnStateListeners;
     private TurnEndListener turnEndListener;
 
+    private boolean isFirstTurn = true;
     private Turn current;
 
     public TurnController(Collection<BattleUnit> units) {
@@ -53,6 +54,7 @@ public class TurnController implements TurnEndListener {
         queue.addLast(curUnit);
 
         current = new Turn(queue.getFirst(), this, turnStateListeners);
+        isFirstTurn = false;
 
         updateQueueCycleListeners();
         current.changeState(TurnState.IDLE);
@@ -101,6 +103,9 @@ public class TurnController implements TurnEndListener {
      * only listen to the current turn, add it directly to the current turn instead. */
     public void addTurnStateListener(TurnStateListener listener) {
         turnStateListeners.add(listener);
+        if (isFirstTurn) {
+            current().addStateListener(listener);
+        }
     }
 
     /** Remove a TurnStateListener. The listener will still receive calls from the current turn, unless it removed
