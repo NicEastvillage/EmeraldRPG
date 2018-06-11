@@ -9,9 +9,10 @@ import com.eastvillage.emerald.battle.BattleController;
 public class BattleStage extends Stage {
 
     private BattleController controller;
-    private Table topRoot;
+    private Table topRoot, topLeft;
     private HoverDetails topRightRoot;
     private EndTurnButton endTurnButton;
+    private CastSpellButton spellButton;
 
     public BattleStage(BattleController controller, Skin skin) {
         super();
@@ -19,14 +20,21 @@ public class BattleStage extends Stage {
         this.controller = controller;
 
         setupTop(skin);
+        setupTopRight(skin);
+        setupTopLeft(skin);
+    }
 
-        topRightRoot = new HoverDetails(controller, skin);
-        topRightRoot.setFillParent(true);
-        //topRightRoot.setDebug(true);
-        topRightRoot.top().right();
-        topRightRoot.pad(20);
-        addActor(topRightRoot);
-        controller.getInputProcessor().addUnitInputListener(topRightRoot);
+    private void setupTopLeft(Skin skin) {
+        topLeft = new Table(skin);
+        topLeft.setFillParent(true);
+        topLeft.setDebug(true);
+        topLeft.left().top();
+        topLeft.pad(20);
+        addActor(topLeft);
+
+        spellButton = new CastSpellButton(skin);
+        controller.getTurnController().addTurnStateListener(spellButton);
+        topLeft.add(spellButton).size(150, 70);
     }
 
     private void setupTop(Skin skin) {
@@ -37,7 +45,7 @@ public class BattleStage extends Stage {
         topRoot.pad(20);
         addActor(topRoot);
 
-        endTurnButton = new EndTurnButton("End Turn", skin, "emerald");
+        endTurnButton = new EndTurnButton(skin);
         controller.getTurnController().addTurnStateListener(endTurnButton);
         endTurnButton.addListener(new ClickListener() {
             @Override
@@ -47,5 +55,15 @@ public class BattleStage extends Stage {
             }
         });
         topRoot.add(endTurnButton).size(150, 70);
+    }
+
+    private void setupTopRight(Skin skin) {
+        topRightRoot = new HoverDetails(controller, skin);
+        topRightRoot.setFillParent(true);
+        //topRightRoot.setDebug(true);
+        topRightRoot.top().right();
+        topRightRoot.pad(20);
+        addActor(topRightRoot);
+        controller.getInputProcessor().addUnitInputListener(topRightRoot);
     }
 }

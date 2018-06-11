@@ -155,6 +155,14 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		over: end turn button highlighted
 		disabled: end turn button disabled
 	}
+	sapphire: {
+		font: default-font
+		fontColor: white
+		up: spell button
+		down: spell button down
+		over: spell button highlighted
+		disabled: end turn button disabled
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: {

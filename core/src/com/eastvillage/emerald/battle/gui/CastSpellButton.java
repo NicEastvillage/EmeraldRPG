@@ -5,14 +5,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.eastvillage.emerald.battle.turn.Turn;
 import com.eastvillage.emerald.battle.turn.TurnStateListener;
 
-public class EndTurnButton extends TextButton implements TurnStateListener {
+public class CastSpellButton extends TextButton implements TurnStateListener {
 
-    private static final String TXT_END_TURN = "End Turn";
-    private static final String TXT_SELECTING = "Select";
-    private static final String TXT_WAITING = "Waiting";
+    private static final String TXT_CAST = "Cast Spell";
+    private static final String TXT_CANCEL = "Cancel";
 
-    public EndTurnButton(Skin skin) {
-        super(TXT_END_TURN, skin, "emerald");
+    public CastSpellButton(Skin skin) {
+        super(TXT_CAST, skin, "sapphire");
     }
 
     @Override
@@ -23,24 +22,24 @@ public class EndTurnButton extends TextButton implements TurnStateListener {
     @Override
     public void onTurnStateIdle(Turn turn) {
         setDisabled(false);
-        setText(TXT_END_TURN);
+        setText(TXT_CAST);
     }
 
     @Override
     public void onTurnStateSpecialSelecting(Turn turn) {
-        setDisabled(true);
-        setText(TXT_SELECTING);
+        setDisabled(false);
+        setText(TXT_CANCEL);
     }
 
     @Override
     public void onTurnStateSpecialTargeting(Turn turn) {
-        setDisabled(true);
-        setText(TXT_SELECTING);
+        setDisabled(false);
+        setText(TXT_CANCEL);
     }
 
     @Override
     public void onTurnStateEnd(Turn turn) {
         setDisabled(true);
-        setText(TXT_WAITING);
+        setText(TXT_CAST);
     }
 }
