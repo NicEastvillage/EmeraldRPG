@@ -57,6 +57,12 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 		over: end turn button highlighted
 		disabled: end turn button disabled
 	}
+	sapphire: {
+		up: spell button
+		down: spell button down
+		over: spell button highlighted
+		disabled: end turn button disabled
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 	default: {
