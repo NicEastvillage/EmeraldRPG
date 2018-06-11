@@ -2,13 +2,14 @@ package com.eastvillage.emerald.battle;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.eastvillage.emerald.battle.battlefield.*;
+import com.eastvillage.emerald.battle.gui.EndTurnButtonListener;
 import com.eastvillage.emerald.battle.turn.*;
 
 import java.util.HashSet;
 import java.util.Random;
 import java.util.function.Function;
 
-public class BattleController implements BattlefieldTileInputListener, TurnQueueListener, TurnStateListener, TurnEndListener {
+public class BattleController implements BattlefieldTileInputListener, TurnQueueListener, TurnStateListener, TurnEndListener, EndTurnButtonListener {
 
     private Battlefield battlefield;
     private TurnController turnController;
@@ -194,6 +195,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         turnController.cycleQueue();
     }
 
+    @Override
     public void onEndTurnButtonPressed() {
         turnController.current().changeState(TurnState.ENDED);
     }

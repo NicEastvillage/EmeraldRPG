@@ -27,7 +27,7 @@ public class BattleStage extends Stage {
     private void setupTopLeft(Skin skin) {
         topLeft = new Table(skin);
         topLeft.setFillParent(true);
-        topLeft.setDebug(true);
+        //topLeft.setDebug(true);
         topLeft.left().top();
         topLeft.pad(20);
         addActor(topLeft);
@@ -47,11 +47,12 @@ public class BattleStage extends Stage {
 
         endTurnButton = new EndTurnButton(skin);
         controller.getTurnController().addTurnStateListener(endTurnButton);
+        endTurnButton.addListener(controller);
         endTurnButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (!endTurnButton.isDisabled())
-                    controller.onEndTurnButtonPressed();
+                    endTurnButton.onClick(event);
             }
         });
         topRoot.add(endTurnButton).size(150, 70);
