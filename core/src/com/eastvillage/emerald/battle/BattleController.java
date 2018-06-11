@@ -110,14 +110,14 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
 
     @Override
     public void onTurnStateAny(Turn turn) {
-
+        clearPossibleMoves();
+        clearPossibleAttacks();
+        highlightController.clearAll();
+        clickableTiles.clear();
     }
 
     @Override
     public void onTurnStateIdle(Turn turn) {
-        highlightController.clearAll();
-        clickableTiles.clear();
-
         BattleUnit unit = turn.getUnit();
 
         Hex pos = battlefield.getPositionOf(unit);
@@ -146,9 +146,14 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
             rangeHighlightController.setHexes(possibleMoveHexes);
             rangeHighlightController.addHex(start);
         } else {
-            possibleMoveHexes.clear();
-            rangeHighlightController.clearHexes();
+            clearPossibleMoves();
         }
+    }
+
+    /** ClickableTiles are not cleared as a result of calling this. */
+    private void clearPossibleMoves() {
+        possibleMoveHexes.clear();
+        rangeHighlightController.clearHexes();
     }
 
     /** Find possible attacks in range of unit. Possible attacks will be stored in {@code possibleAttacks}
@@ -171,6 +176,11 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
 
         highlightController.setValidAttacks(possibleAttackHexes);
         clickableTiles.addAll(possibleAttackHexes);
+    }
+
+    /** ClickableTiles are not cleared as a result of calling this. */
+    private void clearPossibleAttacks() {
+        highlightController.clearValidAttacks();
     }
 
     @Override
