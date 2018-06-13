@@ -1,12 +1,10 @@
 package com.eastvillage.emerald.spells;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.emerald.battle.battlefield.BattleUnit;
+import com.eastvillage.emerald.battle.battlefield.Hex;
 
-/** An ability of any kind, shown in a unit's spell menu. */
+/** An instance of an ability in a battle. */
 public interface Ability {
-    BattleAbility createBattleInstance(BattleUnit owner);
-    String getName();
-    String getDescription();
-    TextureRegion getIcon();
+    void onClick();
+    void setTarget(BattleUnit unit, Hex hex);
 }

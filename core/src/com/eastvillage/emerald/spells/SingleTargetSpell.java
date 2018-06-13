@@ -1,11 +1,30 @@
 package com.eastvillage.emerald.spells;
 
+import com.eastvillage.emerald.battle.BattleController;
 import com.eastvillage.emerald.battle.battlefield.BattleUnit;
+import com.eastvillage.emerald.battle.battlefield.Hex;
+import com.eastvillage.emerald.spells.types.SingleTargetSpellType;
 
-import java.util.List;
+public class SingleTargetSpell implements Ability {
 
-/** A Spell that targets exactly one unit. */
-public interface SingleTargetSpell extends Ability {
-    List<BattleUnit> filterValidTargets(List<BattleUnit> units);
-    void resolve(BattleUnit target);
+    private BattleController controller;
+    private BattleUnit owner;
+    private SingleTargetSpellType type;
+
+    public SingleTargetSpell(BattleController controller, BattleUnit owner, SingleTargetSpellType type) {
+        this.controller = controller;
+        this.owner = owner;
+        this.type = type;
+    }
+
+    @Override
+    public void onClick() {
+        // TODO Enter/leave turnState.TARGETING + prompt for target
+    }
+
+    @Override
+    public void setTarget(BattleUnit unit, Hex hex) {
+        // TODO Cast spell?
+        // TODO End turn?
+    }
 }

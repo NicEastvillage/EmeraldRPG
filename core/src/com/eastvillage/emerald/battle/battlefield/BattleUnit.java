@@ -30,4 +30,12 @@ public class BattleUnit extends GameObject {
     public Allegiance getAllegiance() {
         return allegiance;
     }
+
+    public boolean isAlly(BattleUnit unit) {
+        return allegiance == unit.getAllegiance();
+    }
+
+    public boolean isEnemy(BattleUnit unit) {
+        return allegiance != unit.getAllegiance();
+    }
 }
