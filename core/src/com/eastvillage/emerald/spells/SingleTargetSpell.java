@@ -5,7 +5,7 @@ import com.eastvillage.emerald.battle.battlefield.BattleUnit;
 import java.util.List;
 
 /** A Spell that targets exactly one unit. */
-public interface SingleTargetSpell extends Spell {
+public interface SingleTargetSpell extends Ability {
     List<BattleUnit> filterValidTargets(List<BattleUnit> units);
-    void setTarget(BattleUnit target);
+    void resolve(BattleUnit target);
 }
