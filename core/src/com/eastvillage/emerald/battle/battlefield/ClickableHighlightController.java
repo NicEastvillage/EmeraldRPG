@@ -4,7 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.emerald.Assets;
 import com.eastvillage.emerald.EmeraldGame;
+import com.eastvillage.emerald.Layers;
 import com.eastvillage.emerald.battle.BattlefieldTileInputListener;
+import com.eastvillage.engine.GameObject;
+import com.eastvillage.engine.TexRenderer;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -17,10 +20,15 @@ public class ClickableHighlightController implements BattlefieldTileInputListene
 
     private Battlefield battlefield;
     private HashMap<ClickableHighlightRegion, Consumer<Tile>> requests;
+    private GameObject hoverShadow;
+    private Hex hoveredHex = null;
 
     public ClickableHighlightController(Battlefield battlefield) {
         this.battlefield = battlefield;
         requests = new HashMap<>();
+
+        hoverShadow = new GameObject();
+        hoverShadow.addComponent(new TexRenderer(hoverShadow.transform, (Texture) EmeraldGame.getAsset(Assets.HOVER_SHADOW)).setZ(Layers.SHADOWS));
 
         highlightCurrentUnit = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.HIGHLIGHT_CURRENT_UNIT));
         highlightMove = new TextureRegion((Texture) EmeraldGame.getAsset(Assets.HIGHLIGHT_MOVE));
@@ -46,6 +54,7 @@ public class ClickableHighlightController implements BattlefieldTileInputListene
     /** Remove all requests. */
     public void clear() {
         requests.clear();
+        hideShadow();
         updateAllHighlights();
     }
 
@@ -75,14 +84,40 @@ public class ClickableHighlightController implements BattlefieldTileInputListene
         }
     }
 
+    /** Returns true if given hex is clickable and has a highlight and callback attached. */
+    public boolean isClickable(Hex hex) {
+        for (ClickableHighlightRegion region : requests.keySet()) {
+            for (Hex rhex : region.getRegion()) {
+                if (rhex.equals(hex)) return true;
+            }
+        }
+        return false;
+    }
+
+    /** Shows the shadow at given tile. */
+    private void showShadow(Tile tile) {
+        hoveredHex = tile.hex;
+        hoverShadow.transform.setParent(tile.transform);
+    }
+
+    /** Hides the shadow. */
+    private void hideShadow() {
+        hoveredHex = null;
+        hoverShadow.transform.setParent(null);
+    }
+
     @Override
     public void onTileHoverBegin(Tile tile) {
-
+        if (isClickable(tile.hex)) {
+            showShadow(tile);
+        } else {
+            hideShadow();
+        }
     }
 
     @Override
     public void onTileHoverEnd(Tile tile) {
-
+        hideShadow();
     }
 
     @Override
