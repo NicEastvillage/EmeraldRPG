@@ -17,7 +17,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
     private BattlefieldInputProcessor inputProcessor;
     private HighlightController highlightController;
     private RangeHighlightController rangeHighlightController;
-    private ClickableTilesController clickableTiles;
+    private ClickableHighlightController clickableController;
 
     private HashSet<Hex> possibleMoveHexes = new HashSet<>();
     private HashSet<BattleUnit> possibleAttacks = new HashSet<>();
@@ -36,8 +36,8 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         inputProcessor.addTileInputListener(this);
 
         highlightController = new HighlightController(battlefield);
-        clickableTiles = new ClickableTilesController(battlefield);
-        inputProcessor.addTileInputListener(clickableTiles);
+        clickableController = new ClickableHighlightController(battlefield);
+        inputProcessor.addTileInputListener(clickableController);
         rangeHighlightController = new RangeHighlightController(battlefield);
         inputProcessor.addTileInputListener(rangeHighlightController);
     }
@@ -54,18 +54,33 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
 
     @Override
     public void onTileClicked(Tile tile, int button) {
+
+    }
+
+    /** Called when a click requested for movement happens. */
+    private boolean tryMoveClickCallback(Tile tile, int button) {
         if (button == 0) {
-            BattleUnit unit = battlefield.getUnitAt(tile.hex);
             if (possibleMoveHexes.contains(tile.hex)) {
                 new UnitMover(battlefield.transform, turnController.current().getUnit(), battlefield, tile);
                 turnController.current().markHasMoved();
                 turnController.current().changeState(TurnState.IDLE);
-            } else if (unit != null && possibleAttacks.contains(unit)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Called when a click requested for attacks happens. */
+    private boolean tryAttackClickCallback(Tile tile, int button) {
+        if (button == 0) {
+            BattleUnit unit = battlefield.getUnitAt(tile.hex);
+            if (unit != null && possibleAttacks.contains(unit)) {
                 attack(turnController.current().getUnit(), unit);
                 resolveDeath(unit);
                 turnController.current().changeState(TurnState.ENDED);
             }
         }
+        return false;
     }
 
     /** Make one unit make a standard attack against another unit. */
@@ -113,7 +128,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         clearPossibleMoves();
         clearPossibleAttacks();
         highlightController.clearAll();
-        clickableTiles.clear();
+        clickableController.clear();
     }
 
     @Override
@@ -140,8 +155,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
             possibleMoveHexes = pather.getAllReachableHexes();
             possibleMoveHexes.remove(start);
 
-            highlightController.setValidMoves(possibleMoveHexes);
-            clickableTiles.addAll(possibleMoveHexes);
+            clickableController.request(possibleMoveHexes, HighlightType.VALID_MOVE, this::tryMoveClickCallback);
             rangeHighlightController.setRange(turn.getUnit().getUnit().getRange().getValue());
             rangeHighlightController.setHexes(possibleMoveHexes);
             rangeHighlightController.addHex(start);
@@ -150,7 +164,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         }
     }
 
-    /** ClickableTiles are not cleared as a result of calling this. */
+    /** clickableController are not cleared as a result of calling this. */
     private void clearPossibleMoves() {
         possibleMoveHexes.clear();
         rangeHighlightController.clearHexes();
@@ -173,12 +187,13 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
                 }
             }
         }
-
-        highlightController.setValidAttacks(possibleAttackHexes);
-        clickableTiles.addAll(possibleAttackHexes);
+        
+        if (possibleAttackHexes.size() != 0) {
+            clickableController.request(possibleAttackHexes, HighlightType.VALID_ATTACK, this::tryAttackClickCallback);
+        }
     }
 
-    /** ClickableTiles are not cleared as a result of calling this. */
+    /** clickableController are not cleared as a result of calling this. */
     private void clearPossibleAttacks() {
         highlightController.clearValidAttacks();
     }
