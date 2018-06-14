@@ -1,18 +1,19 @@
 package com.eastvillage.emerald.battle.battlefield;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
-public class ClickableHighlightRegion {
+public class ClickableHighlightRequest {
 
     private Set<Hex> region;
     private HighlightType type;
+    private Consumer<Tile> callback;
 
-    public ClickableHighlightRegion(Set<Hex> region, HighlightType type) {
+    public ClickableHighlightRequest(Set<Hex> region, HighlightType type, Consumer<Tile> callback) {
         this.region = region;
         this.type = type;
+        this.callback = callback;
     }
 
     public Set<Hex> getRegion() {
@@ -21,5 +22,9 @@ public class ClickableHighlightRegion {
 
     public HighlightType getType() {
         return type;
+    }
+
+    public void callback(Tile tile) {
+        callback.accept(tile);
     }
 }

@@ -19,13 +19,13 @@ public class ClickableHighlightController implements BattlefieldTileInputListene
     private TextureRegion highlightAttack;
 
     private Battlefield battlefield;
-    private HashMap<ClickableHighlightRegion, Consumer<Tile>> requests;
+    private HashSet<ClickableHighlightRequest> requests;
     private GameObject hoverShadow;
     private Hex hoveredHex = null;
 
     public ClickableHighlightController(Battlefield battlefield) {
         this.battlefield = battlefield;
-        requests = new HashMap<>();
+        requests = new HashSet<>();
 
         hoverShadow = new GameObject();
         hoverShadow.addComponent(new TexRenderer(hoverShadow.transform, (Texture) EmeraldGame.getAsset(Assets.HOVER_SHADOW)).setZ(Layers.SHADOWS));
@@ -37,16 +37,22 @@ public class ClickableHighlightController implements BattlefieldTileInputListene
 
     /** Request a click on one of the given hexes using the type of highlight given. The callback method will be called
      * when the click happens, and the highlight will disappear afterwards. The request can also be cancelled by
-     * calling {@link #remove(ClickableHighlightRegion)}.*/
-    public ClickableHighlightRegion request(Set<Hex> hexes, HighlightType type, Consumer<Tile> callback) {
-        ClickableHighlightRegion region = new ClickableHighlightRegion(new HashSet<>(hexes), type);
-        requests.put(region, callback);
-        displayHighlights(region);
-        return region;
+     * calling {@link #remove(ClickableHighlightRequest)}.*/
+    public ClickableHighlightRequest request(Set<Hex> hexes, HighlightType type, Consumer<Tile> callback) {
+        return request(new ClickableHighlightRequest(new HashSet<>(hexes), type, callback));
     }
 
-    /** Remove a request by given the region created upon request. */
-    public void remove(ClickableHighlightRegion region) {
+    /** Add a request for a click. The callback method will be called
+     * when the click happens, and the highlight will disappear afterwards. The request can also be cancelled by
+     * calling {@link #remove(ClickableHighlightRequest)}.*/
+    public ClickableHighlightRequest request(ClickableHighlightRequest request) {
+        requests.add(request);
+        displayHighlights(request);
+        return request;
+    }
+
+    /** Remove a request */
+    public void remove(ClickableHighlightRequest region) {
         requests.remove(region);
         updateAllHighlights();
     }
@@ -62,12 +68,12 @@ public class ClickableHighlightController implements BattlefieldTileInputListene
         for (Tile tile : battlefield) {
             tile.showHighlight(null);
         }
-        for (ClickableHighlightRegion region : requests.keySet()) {
+        for (ClickableHighlightRequest region : requests) {
             displayHighlights(region);
         }
     }
 
-    private void displayHighlights(ClickableHighlightRegion region) {
+    private void displayHighlights(ClickableHighlightRequest region) {
         Set<Hex> hexes = region.getRegion();
         TextureRegion tex = getHighlightTexture(region.getType());
         for (Hex hex : hexes) {
@@ -86,8 +92,8 @@ public class ClickableHighlightController implements BattlefieldTileInputListene
 
     /** Returns true if given hex is clickable and has a highlight and callback attached. */
     public boolean isClickable(Hex hex) {
-        for (ClickableHighlightRegion region : requests.keySet()) {
-            for (Hex rhex : region.getRegion()) {
+        for (ClickableHighlightRequest request : requests) {
+            for (Hex rhex : request.getRegion()) {
                 if (rhex.equals(hex)) return true;
             }
         }
@@ -138,22 +144,22 @@ public class ClickableHighlightController implements BattlefieldTileInputListene
     @Override
     public void onTileClicked(Tile tile, int button) {
         boolean anyFulfilled = false;
-        List<ClickableHighlightRegion> requestsFulfilled = new ArrayList<>();
-        for (ClickableHighlightRegion region : requests.keySet()) {
-            Set<Hex> hexes = region.getRegion();
+        List<ClickableHighlightRequest> requestsFulfilled = new ArrayList<>();
+        for (ClickableHighlightRequest request : requests) {
+            Set<Hex> hexes = request.getRegion();
             for (Hex hex : hexes) {
                 Tile clicked = battlefield.getTile(hex);
                 if (clicked == tile) {
-                    requests.get(region).accept(clicked);
-                    requestsFulfilled.add(region);
+                    request.callback(tile);
+                    requestsFulfilled.add(request);
                     anyFulfilled = true;
                 }
             }
         }
 
         if (anyFulfilled) {
-            for (ClickableHighlightRegion region : requestsFulfilled) {
-                requests.remove(region);
+            for (ClickableHighlightRequest request : requestsFulfilled) {
+                requests.remove(request);
             }
             updateAllHighlights();
         }
