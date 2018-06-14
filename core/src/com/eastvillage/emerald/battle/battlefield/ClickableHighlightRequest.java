@@ -8,9 +8,9 @@ public class ClickableHighlightRequest {
 
     private Set<Hex> region;
     private HighlightType type;
-    private Consumer<Tile> callback;
+    private TileClickListener callback;
 
-    public ClickableHighlightRequest(Set<Hex> region, HighlightType type, Consumer<Tile> callback) {
+    public ClickableHighlightRequest(Set<Hex> region, HighlightType type, TileClickListener callback) {
         this.region = region;
         this.type = type;
         this.callback = callback;
@@ -24,7 +24,7 @@ public class ClickableHighlightRequest {
         return type;
     }
 
-    public void callback(Tile tile) {
-        callback.accept(tile);
+    public boolean callback(Tile tile, int button) {
+        return callback.click(tile, button);
     }
 }

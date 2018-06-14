@@ -36,15 +36,15 @@ public class ClickableHighlightController implements BattlefieldTileInputListene
     }
 
     /** Request a click on one of the given hexes using the type of highlight given. The callback method will be called
-     * when the click happens, and the highlight will disappear afterwards. The request can also be cancelled by
-     * calling {@link #remove(ClickableHighlightRequest)}.*/
-    public ClickableHighlightRequest request(Set<Hex> hexes, HighlightType type, Consumer<Tile> callback) {
+     * when the click happens, and if true is returned by the callback, the request is consumed and the highlight
+     * will disappear. The request can also be cancelled by calling {@link #remove(ClickableHighlightRequest)}. */
+    public ClickableHighlightRequest request(Set<Hex> hexes, HighlightType type, TileClickListener callback) {
         return request(new ClickableHighlightRequest(new HashSet<>(hexes), type, callback));
     }
 
     /** Add a request for a click. The callback method will be called
-     * when the click happens, and the highlight will disappear afterwards. The request can also be cancelled by
-     * calling {@link #remove(ClickableHighlightRequest)}.*/
+     * when the click happens, and if true is returned by the callback, the request is consumed and the highlight
+     * will disappear. The request can also be cancelled by calling {@link #remove(ClickableHighlightRequest)}.*/
     public ClickableHighlightRequest request(ClickableHighlightRequest request) {
         requests.add(request);
         displayHighlights(request);
@@ -143,23 +143,25 @@ public class ClickableHighlightController implements BattlefieldTileInputListene
 
     @Override
     public void onTileClicked(Tile tile, int button) {
-        boolean anyFulfilled = false;
-        List<ClickableHighlightRequest> requestsFulfilled = new ArrayList<>();
+        List<ClickableHighlightRequest> hitRequests = new ArrayList<>();
         for (ClickableHighlightRequest request : requests) {
             Set<Hex> hexes = request.getRegion();
             for (Hex hex : hexes) {
                 Tile clicked = battlefield.getTile(hex);
                 if (clicked == tile) {
-                    request.callback(tile);
-                    requestsFulfilled.add(request);
-                    anyFulfilled = true;
+                    hitRequests.add(request);
                 }
             }
         }
 
-        if (anyFulfilled) {
-            for (ClickableHighlightRequest request : requestsFulfilled) {
-                requests.remove(request);
+        if (hitRequests.size() != 0) {
+            // NOTE: The callback might clear the ClickableHighlightController, which means we have to remove request
+            // in a separate loop and check
+            for (ClickableHighlightRequest request : hitRequests) {
+                boolean consumed = request.callback(tile, button);
+                if (consumed) {
+                    requests.remove(request);
+                }
             }
             updateAllHighlights();
         }
