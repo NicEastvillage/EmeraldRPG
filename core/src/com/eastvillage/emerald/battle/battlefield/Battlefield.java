@@ -11,10 +11,13 @@ import com.eastvillage.utility.collections.BiMap;
 import com.eastvillage.utility.math.Vector2;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.function.Consumer;
 
 /** A battlefield is a game object and responsible for displaying and positioning the tiles and units of the battle. */
-public class Battlefield extends GameObject {
+public class Battlefield extends GameObject implements Iterable<Tile> {
 
     public static final int TILE_VERT = 9;
     public static final int TILE_HOR = 12;
@@ -124,5 +127,20 @@ public class Battlefield extends GameObject {
         float r = 0                          +  1f/Tile.SPACING_HEIGHT * y;
 
         return Hex.fromRounding(q, r);
+    }
+
+    @Override
+    public Iterator<Tile> iterator() {
+        return map.values().iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super Tile> action) {
+        map.values().forEach(action);
+    }
+
+    @Override
+    public Spliterator<Tile> spliterator() {
+        return map.values().spliterator();
     }
 }
