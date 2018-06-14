@@ -17,7 +17,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
     private BattlefieldInputProcessor inputProcessor;
     private HighlightController highlightController;
     private RangeHighlightController rangeHighlightController;
-    private ClickableHighlightController clickableController;
+    private ClickableHighlightController clickableHighlightController;
 
     private HashSet<Hex> possibleMoveHexes = new HashSet<>();
     private HashSet<BattleUnit> possibleAttacks = new HashSet<>();
@@ -36,8 +36,8 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         inputProcessor.addTileInputListener(this);
 
         highlightController = new HighlightController(battlefield);
-        clickableController = new ClickableHighlightController(battlefield);
-        inputProcessor.addTileInputListener(clickableController);
+        clickableHighlightController = new ClickableHighlightController(battlefield);
+        inputProcessor.addTileInputListener(clickableHighlightController);
         rangeHighlightController = new RangeHighlightController(battlefield);
         inputProcessor.addTileInputListener(rangeHighlightController);
     }
@@ -128,7 +128,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         clearPossibleMoves();
         clearPossibleAttacks();
         highlightController.clearAll();
-        clickableController.clear();
+        clickableHighlightController.clear();
     }
 
     @Override
@@ -155,7 +155,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
             possibleMoveHexes = pather.getAllReachableHexes();
             possibleMoveHexes.remove(start);
 
-            clickableController.request(possibleMoveHexes, HighlightType.VALID_MOVE, this::tryMoveClickCallback);
+            clickableHighlightController.request(possibleMoveHexes, HighlightType.VALID_MOVE, this::tryMoveClickCallback);
             rangeHighlightController.setRange(turn.getUnit().getUnit().getRange().getValue());
             rangeHighlightController.setHexes(possibleMoveHexes);
             rangeHighlightController.addHex(start);
@@ -164,7 +164,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         }
     }
 
-    /** clickableController are not cleared as a result of calling this. */
+    /** clickableHighlightController are not cleared as a result of calling this. */
     private void clearPossibleMoves() {
         possibleMoveHexes.clear();
         rangeHighlightController.clearHexes();
@@ -189,11 +189,11 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         }
         
         if (possibleAttackHexes.size() != 0) {
-            clickableController.request(possibleAttackHexes, HighlightType.VALID_ATTACK, this::tryAttackClickCallback);
+            clickableHighlightController.request(possibleAttackHexes, HighlightType.VALID_ATTACK, this::tryAttackClickCallback);
         }
     }
 
-    /** clickableController are not cleared as a result of calling this. */
+    /** clickableHighlightController are not cleared as a result of calling this. */
     private void clearPossibleAttacks() {
         highlightController.clearValidAttacks();
     }
@@ -250,4 +250,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         return inputProcessor;
     }
 
+    public ClickableHighlightController getClickableHighlightController() {
+        return clickableHighlightController;
+    }
 }

@@ -2,19 +2,21 @@ package com.eastvillage.emerald.unit;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.emerald.battle.AmountOfDamage;
+import com.eastvillage.emerald.spells.Ability;
+import com.eastvillage.emerald.spells.types.AbilityType;
 import com.eastvillage.emerald.unit.stat.Stat;
 import com.eastvillage.emerald.unit.type.UnitType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Unit {
 
     private int owner;
     private final UnitType type;
-    private Random random = new Random();
 
     private final Stat maxHealth, defense, magicDefense, attack, range, movementSpeed, strength, agility, magicPower;
-
     private int currentHealth;
 
     public Unit(int owner, UnitType type) {
@@ -61,6 +63,10 @@ public class Unit {
 
     public int getOwner() {
         return owner;
+    }
+
+    public AbilityType[] getAbilities() {
+        return type.getAbilities();
     }
 
     public UnitType getType() {

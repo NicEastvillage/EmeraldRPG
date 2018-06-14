@@ -3,6 +3,7 @@ package com.eastvillage.emerald.spells.types;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.emerald.battle.BattleController;
 import com.eastvillage.emerald.battle.battlefield.BattleUnit;
+import com.eastvillage.emerald.battle.battlefield.Tile;
 import com.eastvillage.emerald.spells.Ability;
 import com.eastvillage.emerald.spells.SingleTargetSpell;
 
@@ -17,13 +18,13 @@ public class SteadyShot implements SingleTargetSpellType {
     }
 
     @Override
-    public void resolve(BattleUnit target) {
+    public void resolve(BattleUnit target, Tile tile) {
         // TODO Deal damage
     }
 
     @Override
-    public Ability createInstance(BattleController controller, BattleUnit owner) {
-        return new SingleTargetSpell(controller, owner, this);
+    public Ability createInstance(BattleUnit owner) {
+        return new SingleTargetSpell(owner, this);
     }
 
     @Override

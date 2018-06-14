@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.emerald.Assets;
 import com.eastvillage.emerald.EmeraldGame;
+import com.eastvillage.emerald.spells.types.AbilityType;
+import com.eastvillage.emerald.spells.types.SteadyShot;
 import com.eastvillage.emerald.unit.Unit;
 
 public class Knight implements UnitType {
@@ -51,6 +53,11 @@ public class Knight implements UnitType {
     @Override
     public int getBaseMovementSpeed() {
         return 3;
+    }
+
+    @Override
+    public AbilityType[] getAbilities() {
+        return new AbilityType[] {};
     }
 
     @Override

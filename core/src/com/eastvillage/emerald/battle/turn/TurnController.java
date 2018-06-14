@@ -34,6 +34,7 @@ public class TurnController implements TurnEndListener {
 
     /** Starts the first turn by switching its state to IDLE. */
     public void start() {
+        updateQueueCycleListeners();
         current.changeState(TurnState.IDLE);
     }
 

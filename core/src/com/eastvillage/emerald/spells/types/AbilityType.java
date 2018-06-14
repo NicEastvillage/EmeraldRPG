@@ -7,7 +7,7 @@ import com.eastvillage.emerald.spells.Ability;
 
 /** An ability of any kind */
 public interface AbilityType {
-    Ability createInstance(BattleController controller, BattleUnit owner);
+    Ability createInstance(BattleUnit owner);
     String getName();
     String getDescription();
     TextureRegion getIcon();

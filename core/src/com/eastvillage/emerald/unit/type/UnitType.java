@@ -1,7 +1,10 @@
 package com.eastvillage.emerald.unit.type;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.eastvillage.emerald.spells.types.AbilityType;
 import com.eastvillage.emerald.unit.Unit;
+
+import java.util.List;
 
 public interface UnitType {
 
@@ -14,6 +17,7 @@ public interface UnitType {
     int getBaseMagicPower();
     int getBaseRange();
     int getBaseMovementSpeed();
+    AbilityType[] getAbilities();
     String getTypeName();
     TextureRegion getTexture();
 }
