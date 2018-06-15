@@ -1,16 +1,16 @@
 package com.eastvillage.emerald.battle;
 
-import com.eastvillage.emerald.battle.battlefield.BattleUnit;
-import com.eastvillage.emerald.battle.battlefield.Battlefield;
-import com.eastvillage.emerald.battle.battlefield.ClickableHighlightController;
+import com.eastvillage.emerald.battle.battlefield.*;
 import com.eastvillage.emerald.battle.turn.TurnController;
 import com.eastvillage.emerald.battle.turn.TurnQueueListener;
+import com.eastvillage.emerald.battle.turn.TurnState;
 import com.eastvillage.emerald.spells.Ability;
 import com.eastvillage.emerald.spells.Spell;
 import com.eastvillage.emerald.spells.TargetedSpell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /** The SpellController keeps track of which spells the current unit can cast as well as selecting, deselecting, and casting. */
 public class SpellController implements TurnQueueListener {
@@ -18,16 +18,19 @@ public class SpellController implements TurnQueueListener {
     private static final int NONE = -1;
 
     private BattleController controller;
+    private TurnController turnController;
     private Battlefield battlefield;
     private ClickableHighlightController clickableHighlightController;
 
     private BattleUnit currentUnit;
     private List<Ability> currentAbilities;
     private int selectedIndex = NONE;
-    private Ability selectedAbility;
+    private TargetedSpell selectedSpell;
+    private ClickableHighlightRequest targetRequest;
 
     public SpellController(BattleController controller) {
         this.controller = controller;
+        this.turnController = controller.getTurnController();
         this.battlefield = controller.getBattlefield();
         this.clickableHighlightController = controller.getClickableHighlightController();
     }
@@ -70,15 +73,31 @@ public class SpellController implements TurnQueueListener {
 
     private void selectSpellAndStartTargeting(int index, TargetedSpell spell) {
         selectedIndex = index;
-        selectedAbility = spell;
-        spell.onTargetSelectBegin(battlefield, clickableHighlightController);
+        selectedSpell = spell;
+        turnController.current().changeState(TurnState.SELECTING_SPECIAL_TARGET);
+        Set<Hex> possibleTargetHexes = spell.findTargets(currentUnit, battlefield);
+        targetRequest = clickableHighlightController.request(possibleTargetHexes, HighlightType.VALID_ATTACK, this::tryCastSelectSpell);
     }
 
     /** Deselect any currently selected TargetedSpell. */
     public void deselect() {
-        // Only TargetedSpells can be "selected" currently
-        if (selectedAbility != null) ((TargetedSpell) selectedAbility).onTargetSelectCancel(clickableHighlightController);
+        // Any "selected" spell are waiting for at target request
+        if (selectedSpell != null) clickableHighlightController.remove(targetRequest);
         selectedIndex = NONE;
-        selectedAbility = null;
+        selectedSpell = null;
+        turnController.current().changeState(TurnState.IDLE);
+    }
+
+    private boolean tryCastSelectSpell(Tile targetTile, int button) {
+        if (button == 0) {
+            BattleUnit unit = battlefield.getUnitAt(targetTile.hex);
+            selectedSpell.resolve(unit, targetTile);
+
+            selectedIndex = NONE;
+            selectedSpell = null;
+            turnController.current().changeState(TurnState.ENDED);
+            return true;
+        }
+        return false;
     }
 }

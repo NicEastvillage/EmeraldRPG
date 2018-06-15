@@ -52,8 +52,8 @@ public class ClickableHighlightController implements BattlefieldTileInputListene
     }
 
     /** Remove a request */
-    public void remove(ClickableHighlightRequest region) {
-        requests.remove(region);
+    public void remove(ClickableHighlightRequest request) {
+        requests.remove(request);
         updateAllHighlights();
     }
 
@@ -68,14 +68,14 @@ public class ClickableHighlightController implements BattlefieldTileInputListene
         for (Tile tile : battlefield) {
             tile.showHighlight(null);
         }
-        for (ClickableHighlightRequest region : requests) {
-            displayHighlights(region);
+        for (ClickableHighlightRequest request : requests) {
+            displayHighlights(request);
         }
     }
 
-    private void displayHighlights(ClickableHighlightRequest region) {
-        Set<Hex> hexes = region.getRegion();
-        TextureRegion tex = getHighlightTexture(region.getType());
+    private void displayHighlights(ClickableHighlightRequest request) {
+        Set<Hex> hexes = request.getRegion();
+        TextureRegion tex = getHighlightTexture(request.getType());
         for (Hex hex : hexes) {
             battlefield.getTile(hex).showHighlight(tex);
         }

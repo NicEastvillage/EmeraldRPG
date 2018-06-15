@@ -3,18 +3,21 @@ package com.eastvillage.emerald.spells.types;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.eastvillage.emerald.battle.BattleController;
 import com.eastvillage.emerald.battle.battlefield.BattleUnit;
+import com.eastvillage.emerald.battle.battlefield.Battlefield;
+import com.eastvillage.emerald.battle.battlefield.Hex;
 import com.eastvillage.emerald.battle.battlefield.Tile;
 import com.eastvillage.emerald.spells.Ability;
 import com.eastvillage.emerald.spells.SingleTargetSpell;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SteadyShot implements SingleTargetSpellType {
 
     @Override
-    public List<BattleUnit> filterValidTargets(BattleUnit caster, List<BattleUnit> units) {
-        return units.stream().filter(caster::isEnemy).collect(Collectors.toList());
+    public Set<Hex> findTargets(BattleUnit caster, Battlefield battlefield) {
+        return battlefield.getAllUnits().stream().filter(caster::isEnemy).map(battlefield::getPositionOf).collect(Collectors.toSet());
     }
 
     @Override

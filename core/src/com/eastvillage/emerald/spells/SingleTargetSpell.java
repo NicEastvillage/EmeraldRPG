@@ -6,6 +6,8 @@ import com.eastvillage.emerald.battle.battlefield.*;
 import com.eastvillage.emerald.spells.types.AbilityType;
 import com.eastvillage.emerald.spells.types.SingleTargetSpellType;
 
+import java.util.Set;
+
 public class SingleTargetSpell implements TargetedSpell {
 
     private BattleUnit owner;
@@ -17,18 +19,13 @@ public class SingleTargetSpell implements TargetedSpell {
     }
 
     @Override
-    public void onTargetSelectBegin(Battlefield battlefield, ClickableHighlightController clickRequester) {
-
+    public Set<Hex> findTargets(BattleUnit caster, Battlefield battlefield) {
+        return type.findTargets(caster, battlefield);
     }
 
     @Override
-    public void onTargetSelectCancel(ClickableHighlightController clickRequester) {
-
-    }
-
-    @Override
-    public void resolve() {
-
+    public void resolve(BattleUnit target, Tile tile) {
+        type.resolve(target, tile);
     }
 
     @Override
