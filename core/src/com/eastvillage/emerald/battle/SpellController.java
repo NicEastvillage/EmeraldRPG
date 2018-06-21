@@ -17,9 +17,8 @@ public class SpellController implements TurnQueueListener {
 
     private static final int NONE = -1;
 
-    private BattleController controller;
-    private TurnController turnController;
     private Battlefield battlefield;
+    private TurnController turnController;
     private ClickableHighlightController clickableHighlightController;
 
     private BattleUnit currentUnit;
@@ -28,11 +27,10 @@ public class SpellController implements TurnQueueListener {
     private TargetedSpell selectedSpell;
     private ClickableHighlightRequest targetRequest;
 
-    public SpellController(BattleController controller) {
-        this.controller = controller;
-        this.turnController = controller.getTurnController();
-        this.battlefield = controller.getBattlefield();
-        this.clickableHighlightController = controller.getClickableHighlightController();
+    public SpellController(Battlefield battlefield, TurnController turnController, ClickableHighlightController clickableHighlightController) {
+        this.battlefield = battlefield;
+        this.turnController = turnController;
+        this.clickableHighlightController = clickableHighlightController;
     }
 
     @Override

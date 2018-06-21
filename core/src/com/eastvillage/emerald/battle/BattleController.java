@@ -18,6 +18,7 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
     private HighlightController highlightController;
     private RangeHighlightController rangeHighlightController;
     private ClickableHighlightController clickableHighlightController;
+    private SpellController spellController;
 
     private HashSet<Hex> possibleMoveHexes = new HashSet<>();
     private HashSet<BattleUnit> possibleAttacks = new HashSet<>();
@@ -40,6 +41,9 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         inputProcessor.addTileInputListener(clickableHighlightController);
         rangeHighlightController = new RangeHighlightController(battlefield);
         inputProcessor.addTileInputListener(rangeHighlightController);
+
+        spellController = new SpellController(battlefield, turnController, clickableHighlightController);
+        turnController.addQueueListener(spellController);
     }
 
     @Override
