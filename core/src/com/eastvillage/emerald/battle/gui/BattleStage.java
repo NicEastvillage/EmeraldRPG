@@ -5,14 +5,17 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.eastvillage.emerald.battle.BattleController;
+import com.eastvillage.emerald.battle.SpellController;
 
 public class BattleStage extends Stage {
+
+    private static final int SPELL_BUTTON_COUNT = 3;
 
     private BattleController controller;
     private Table topRoot, topLeft;
     private HoverDetails topRightRoot;
     private EndTurnButton endTurnButton;
-    private CastSpellButton spellButton;
+    private SpellButton[] spellButtons;
 
     public BattleStage(BattleController controller, Skin skin) {
         super();
@@ -21,10 +24,10 @@ public class BattleStage extends Stage {
 
         setupTop(skin);
         setupTopRight(skin);
-        setupTopLeft(skin);
+        setupTopLeft(skin, controller.getSpellController());
     }
 
-    private void setupTopLeft(Skin skin) {
+    private void setupTopLeft(Skin skin, SpellController spellController) {
         topLeft = new Table(skin);
         topLeft.setFillParent(true);
         //topLeft.setDebug(true);
@@ -32,17 +35,22 @@ public class BattleStage extends Stage {
         topLeft.pad(20);
         addActor(topLeft);
 
-        spellButton = new CastSpellButton(skin);
-        controller.getTurnController().addTurnStateListener(spellButton);
-        spellButton.addListener(controller);
-        spellButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!spellButton.isDisabled())
-                    spellButton.onClick(event);
-            }
-        });
-        topLeft.add(spellButton).size(150, 70);
+        spellButtons = new SpellButton[SPELL_BUTTON_COUNT];
+        for (int i = 0; i < SPELL_BUTTON_COUNT; i++) {
+            SpellButton button = new SpellButton(skin, spellController, i);
+            //controller.getTurnController().addTurnStateListener(spellButtons[i]);
+            button.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (!button.isDisabled())
+                        button.onClick(event);
+                }
+            });
+            topLeft.add(button).size(70, 70).spaceBottom(16).row();
+
+            spellButtons[i] = button;
+        }
+
     }
 
     private void setupTop(Skin skin) {

@@ -1,18 +1,28 @@
 package com.eastvillage.emerald.battle.gui;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.eastvillage.emerald.spells.Ability;
+import com.eastvillage.emerald.battle.SpellController;
 
-public class SpellButton extends Table {
+public class SpellButton extends Button {
 
-    private Ability ability;
+    private SpellController spellController;
+    private int abilityIndex;
 
-    public SpellButton(Skin skin, Ability ability) {
-        super(skin);
-        this.ability = ability;
+    public SpellButton(Skin skin, SpellController spellController, int abilityIndex) {
+        super(skin, "sapphire");
+        this.spellController = spellController;
+        this.abilityIndex = abilityIndex;
 
-        setDebug(true);
-        add().size(70, 70);
+        //setDebug(true);
+    }
+
+    public boolean isDisabled() {
+        return false;
+    }
+
+    public void onClick(InputEvent event) {
+        spellController.activate(abilityIndex);
     }
 }

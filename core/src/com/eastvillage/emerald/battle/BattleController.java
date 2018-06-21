@@ -2,7 +2,6 @@ package com.eastvillage.emerald.battle;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.eastvillage.emerald.battle.battlefield.*;
-import com.eastvillage.emerald.battle.gui.CastSpellButtonListener;
 import com.eastvillage.emerald.battle.gui.EndTurnButtonListener;
 import com.eastvillage.emerald.battle.turn.*;
 
@@ -10,7 +9,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.function.Function;
 
-public class BattleController implements BattlefieldTileInputListener, TurnQueueListener, TurnStateListener, TurnEndListener, EndTurnButtonListener, CastSpellButtonListener {
+public class BattleController implements BattlefieldTileInputListener, TurnQueueListener, TurnStateListener, TurnEndListener, EndTurnButtonListener {
 
     private Battlefield battlefield;
     private TurnController turnController;
@@ -227,21 +226,6 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
         turnController.current().changeState(TurnState.ENDED);
     }
 
-    @Override
-    public void onCastSpellButtonStartSelecting() {
-        turnController.current().changeState(TurnState.SELECTING_SPECIAL);
-    }
-
-    @Override
-    public void onCastSpellButtonCancelSelecting() {
-        turnController.current().changeState(TurnState.IDLE);
-    }
-
-    @Override
-    public void onCastSpellButtonCancelTargeting() {
-        turnController.current().changeState(TurnState.SELECTING_SPECIAL);
-    }
-
     public Battlefield getBattlefield() {
         return battlefield;
     }
@@ -256,5 +240,9 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
 
     public ClickableHighlightController getClickableHighlightController() {
         return clickableHighlightController;
+    }
+
+    public SpellController getSpellController() {
+        return spellController;
     }
 }
