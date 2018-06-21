@@ -9,6 +9,7 @@ import com.eastvillage.emerald.spells.Spell;
 import com.eastvillage.emerald.spells.TargetedSpell;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -22,10 +23,12 @@ public class SpellController implements TurnQueueListener {
     private ClickableHighlightController clickableHighlightController;
 
     private BattleUnit currentUnit;
-    private List<Ability> currentAbilities;
+    private List<Ability> currentAbilities = new ArrayList<>();
     private int selectedIndex = NONE;
     private TargetedSpell selectedSpell;
     private ClickableHighlightRequest targetRequest;
+
+    private List<SpellControllerListener> listeners = new LinkedList<>();
 
     public SpellController(Battlefield battlefield, TurnController turnController, ClickableHighlightController clickableHighlightController) {
         this.battlefield = battlefield;
@@ -33,11 +36,22 @@ public class SpellController implements TurnQueueListener {
         this.clickableHighlightController = clickableHighlightController;
     }
 
+    public void addListener(SpellControllerListener listener) {
+        listeners.add(listener);
+    }
+
+    public boolean removeListener(SpellControllerListener listener) {
+        return listeners.remove(listener);
+    }
+
     @Override
     public void onQueueCycle(TurnController turnController) {
         deselect();
         currentUnit = turnController.current().getUnit();
         currentAbilities = currentUnit.getAbilities();
+        for (SpellControllerListener listener : listeners) {
+            listener.onCurrentAbilitiesChanged(this);
+        }
     }
 
     @Override
@@ -55,7 +69,7 @@ public class SpellController implements TurnQueueListener {
     public void activate(int index) {
         if (index < 0 || currentAbilities.size() <= index) throw new IndexOutOfBoundsException();
 
-        if (selectedIndex == index) {
+        if (selectedIndex == index) { // TODO What happens if I select another while one is selected?
             deselect();
         } else {
             Ability activated = currentAbilities.get(index);
@@ -72,6 +86,7 @@ public class SpellController implements TurnQueueListener {
     private void selectSpellAndStartTargeting(int index, TargetedSpell spell) {
         selectedIndex = index;
         selectedSpell = spell;
+        listeners.forEach(l -> l.onSpellSelected(this, selectedIndex));
         turnController.current().changeState(TurnState.SELECTING_SPECIAL_TARGET);
         Set<Hex> possibleTargetHexes = spell.findTargets(currentUnit, battlefield);
         targetRequest = clickableHighlightController.request(possibleTargetHexes, HighlightType.VALID_ATTACK, this::tryCastSelectSpell);
@@ -79,10 +94,12 @@ public class SpellController implements TurnQueueListener {
 
     /** Deselect any currently selected TargetedSpell. */
     public void deselect() {
+        int index = selectedIndex;
         // Any "selected" spell are waiting for at target request
         if (selectedSpell != null) clickableHighlightController.remove(targetRequest);
         selectedIndex = NONE;
         selectedSpell = null;
+        listeners.forEach(l -> l.onSpellDeselected(this, selectedIndex));
         turnController.current().changeState(TurnState.IDLE);
     }
 
@@ -91,11 +108,18 @@ public class SpellController implements TurnQueueListener {
             BattleUnit unit = battlefield.getUnitAt(targetTile.hex);
             selectedSpell.resolve(unit, targetTile);
 
+            listeners.forEach(l -> l.afterSpellCast(this, selectedIndex));
+
             selectedIndex = NONE;
             selectedSpell = null;
             turnController.current().changeState(TurnState.ENDED);
             return true;
         }
         return false;
+    }
+
+    /** Returns how many abilities current unit has. */
+    public int abilityCount() {
+        return currentAbilities.size();
     }
 }
