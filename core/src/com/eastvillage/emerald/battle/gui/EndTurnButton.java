@@ -44,12 +44,6 @@ public class EndTurnButton extends TextButton implements TurnStateListener {
     }
 
     @Override
-    public void onTurnStateSpecialSelecting(Turn turn) {
-        setDisabled(true);
-        setText(TXT_SELECTING);
-    }
-
-    @Override
     public void onTurnStateSpecialTargeting(Turn turn) {
         setDisabled(true);
         setText(TXT_SELECTING);

@@ -52,15 +52,11 @@ public class Turn {
                 return other == TurnState.IDLE;
             case IDLE:
                 return other == TurnState.IDLE
-                    || other == TurnState.SELECTING_SPECIAL
+                    || other == TurnState.SELECTING_SPECIAL_TARGET
                     || other == TurnState.ENDED;
 
-            case SELECTING_SPECIAL:
-                return other == TurnState.IDLE
-                    || other == TurnState.SELECTING_SPECIAL_TARGET;
-
             case SELECTING_SPECIAL_TARGET:
-                return other == TurnState.SELECTING_SPECIAL
+                return other == TurnState.IDLE
                     || other == TurnState.ENDED;
 
             case ENDED:
@@ -87,9 +83,6 @@ public class Turn {
             switch (state) {
                 case IDLE:
                     listener.onTurnStateIdle(this);
-                    break;
-                case SELECTING_SPECIAL:
-                    listener.onTurnStateSpecialSelecting(this);
                     break;
                 case SELECTING_SPECIAL_TARGET:
                     listener.onTurnStateSpecialTargeting(this);

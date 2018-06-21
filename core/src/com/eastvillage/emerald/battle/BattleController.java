@@ -202,11 +202,6 @@ public class BattleController implements BattlefieldTileInputListener, TurnQueue
     }
 
     @Override
-    public void onTurnStateSpecialSelecting(Turn turn) {
-
-    }
-
-    @Override
     public void onTurnStateSpecialTargeting(Turn turn) {
 
     }
